@@ -8,7 +8,7 @@ public class PlayerScript : MonoBehaviour
     public bool joined;
     public bool stunned;
     public float timeToBlock = 20.0f;
-    public float damageAmount = 100.0f;
+    public int damageAmount = 100;
     public KeyCode playersButton;
 
     public GameObject boss;
@@ -63,6 +63,7 @@ public class PlayerScript : MonoBehaviour
     void attack()
     {
         Debug.Log("player " + playersButton + " is attacking");
+        boss.GetComponent<BossScript>().health -= damageAmount;
     }
 
     void block()
