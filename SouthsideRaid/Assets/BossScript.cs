@@ -22,6 +22,9 @@ public class BossScript : MonoBehaviour
     public float attackDuration = 2.0f;
     public float downDuration = 5.0f;
 
+    public GameObject outline;
+    public GameObject centre;
+
     private float idleTimer;
     private float attackTimer;
     private float downTimer;
@@ -54,6 +57,8 @@ public class BossScript : MonoBehaviour
                 case Stances.Attack:
                    // Debug.Log("Attack");
                     attackTimer -= Time.deltaTime;
+
+
                     if (attackTimer <= 0.0f)
                     {
                         stance = Stances.Down;
