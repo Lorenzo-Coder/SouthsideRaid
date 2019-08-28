@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
     public bool joined;
     public bool stunned;
     public float timeToBlock = 20.0f;
+    public float damageAmount = 100.0f;
     public KeyCode playersButton;
 
     public GameObject boss;

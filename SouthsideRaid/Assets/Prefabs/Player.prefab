@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 5795792699042895913}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,5 +126,6 @@ MonoBehaviour:
   joined: 0
   stunned: 0
   timeToBlock: 20
+  damageAmount: 100
   playersButton: 0
   boss: {fileID: 0}
