@@ -50,7 +50,7 @@ public class LeaderboardScript : MonoBehaviour
                 {
                    for (int i = 0; i < showTop; i++)
                    {
-                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerScore;
+                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerName + ": " + joinedList[i].GetComponent<PlayerScript>().playerScore;
                    }
                     
                 }
@@ -58,7 +58,8 @@ public class LeaderboardScript : MonoBehaviour
                 {
                     for (int i = 0; i < joinedList.Count; i++)
                     {
-                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerScore;
+                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerName + ": " + joinedList[i].GetComponent<PlayerScript>().playerScore;
+
                     }
                 }
                 // apply it to the leaderboard text

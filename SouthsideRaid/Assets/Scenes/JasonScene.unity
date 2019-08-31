@@ -202,6 +202,11 @@ PrefabInstance:
       propertyPath: playerScore
       value: 3000
       objectReference: {fileID: 0}
+    - target: {fileID: 5795792699042895913, guid: 916e522abfe798f4ab74f7c82a86c5d5,
+        type: 3}
+      propertyPath: playerName
+      value: D
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 916e522abfe798f4ab74f7c82a86c5d5, type: 3}
 --- !u!1 &622061371
@@ -358,6 +363,11 @@ PrefabInstance:
       propertyPath: playerScore
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 5795792699042895913, guid: 916e522abfe798f4ab74f7c82a86c5d5,
+        type: 3}
+      propertyPath: playerName
+      value: S
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 916e522abfe798f4ab74f7c82a86c5d5, type: 3}
 --- !u!1001 &1298433736
@@ -437,6 +447,11 @@ PrefabInstance:
       propertyPath: boss
       value: 
       objectReference: {fileID: 973657921}
+    - target: {fileID: 5795792699042895913, guid: 916e522abfe798f4ab74f7c82a86c5d5,
+        type: 3}
+      propertyPath: playerName
+      value: A
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 916e522abfe798f4ab74f7c82a86c5d5, type: 3}
 --- !u!1001 &1449452142
