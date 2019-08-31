@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
     public int damageAmount = 100;
     public KeyCode playersButton;
 
+    public int playerScore = 0;
+
     public GameObject boss;
 
     private SpriteRenderer spriteRenderer;
@@ -63,7 +65,7 @@ public class PlayerScript : MonoBehaviour
     void attack()
     {
         Debug.Log("player " + playersButton + " is attacking");
-        boss.GetComponent<BossScript>().health -= damageAmount;
+        boss.GetComponent<BossScript>().currentHealth -= damageAmount;
     }
 
     void block()
