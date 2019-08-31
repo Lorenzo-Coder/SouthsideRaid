@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8840779545620813566}
   m_Layer: 0
   m_Name: Time Click
-  m_TagString: Untagged
+  m_TagString: TimeClick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 8840779546372711509}
   centre: {fileID: 8840779547124735431}
-  decreaseRate: 2
   outlineScale: 0.4
   centreScale: 0.06
   duration: 2
@@ -119,7 +118,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 5676971b4534b544e89198e1fc1a70a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -198,7 +197,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ecbd2fd3903fb2a42b854172106cab61, type: 3}
   m_Color: {r: 0, g: 1, b: 0.051280737, a: 1}
   m_FlipX: 0
