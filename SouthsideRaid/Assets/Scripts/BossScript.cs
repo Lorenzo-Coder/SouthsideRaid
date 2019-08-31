@@ -50,7 +50,7 @@ public class BossScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthBar.value = currentHealth / maxHealth;
+        healthBar.value = (float)currentHealth / (float)maxHealth;
         if (currentHealth >= 0)
         {
             switch (stance)
