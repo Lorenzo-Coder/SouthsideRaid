@@ -124,8 +124,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joined: 0
+  blocking: 0
   stunned: 0
   timeToBlock: 20
+  stunTime: 120
+  damageMultiplierAmount: 25
   damageAmount: 100
   playersButton: 0
+  playerName: 
+  playerScore: 0
   boss: {fileID: 0}
+  DPSPopup: {fileID: 0}
