@@ -5,11 +5,11 @@ using TMPro;
 
 public class DPSScript : MonoBehaviour
 {
-    private TextMeshPro textMesh;
+    private TextMeshProUGUI textMesh;
 
     void Awake()
     {
-        textMesh = gameObject.transform.GetComponent<TextMeshPro>();
+        textMesh = gameObject.GetComponent<TextMeshProUGUI>();
     }
     
     public void DPS(int _damage)

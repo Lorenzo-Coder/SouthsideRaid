@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -18,12 +19,14 @@ public class PlayerScript : MonoBehaviour
     public int playerScore = 0;
 
     public GameObject boss;
+    public Canvas canvas;
     public GameObject DPSPopup;
 
     private SpriteRenderer spriteRenderer;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
+    private int timesAttacked = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,11 @@ public class PlayerScript : MonoBehaviour
         {
             if (Input.GetKeyDown(playersButton) && joined == true)
             {
-                attack();
+                if (timesAttacked >=1)
+                {
+                 attack();
+                }
+                timesAttacked++;
             }
         }
 
@@ -94,29 +101,72 @@ public class PlayerScript : MonoBehaviour
     {
         Debug.Log("player " + playersButton + " is attacking");
 
-        if(boss.GetComponent<BossScript>().stance == Stances.Down)
+        if((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
         {
-            boss.GetComponent<BossScript>().currentHealth -= damageAmount + damageMultiplier;
+            boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier);
             Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
-            damageMultiplier = damageMultiplierAmount * 2;
+
+            PopUp(true);
+
             playerScore = playerScore + damageAmount + damageMultiplier;
+            damageMultiplier = damageMultiplier * 2;
+        }
+        else if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == false))
+        {
+            damageMultiplier = damageMultiplierAmount;
         }
         else
         {
-            boss.GetComponent<BossScript>().currentHealth -= damageAmount;
-            damageMultiplier = damageMultiplierAmount;
+            boss.GetComponent<BossScript>().dealDamage(damageAmount);
+
+            PopUp(false);
+
             playerScore = playerScore + damageAmount;
-
-            //Transform DPSTransform = Instantiate(DPSPopup, Can);
-            //DPSScript DPSPopupScript = DPSTransform.GetComponent<DPSScript>();
-            //DPSPopupScript.DPS(damageAmount);
+            damageMultiplier = damageMultiplierAmount;
         }
-
     }
 
     void block()
     {
         Debug.Log("player " + playersButton + " is blocking");
         blocking = true;
+    }
+
+    void PopUp(bool withM)
+    {
+        if (withM == false)
+        {
+            GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
+            popUpObject.transform.SetParent(canvas.transform, false);
+            float xPopUpPos = Random.Range(-85.0f, 85.0f);
+            popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
+            popUpObject.GetComponent<DPSScript>().DPS(damageAmount);
+            StartCoroutine(animateDPS(popUpObject));
+        }
+        else
+        {
+            GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
+            popUpObject.transform.SetParent(canvas.transform, false);
+            float xPopUpPos = Random.Range(-85.0f, 85.0f);
+            popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
+            popUpObject.GetComponent<DPSScript>().DPS(damageAmount + damageMultiplier);
+            StartCoroutine(animateDPS(popUpObject));
+        }
+    }
+
+    IEnumerator animateDPS(GameObject _object)
+    {
+        _object.transform.DOMoveY(_object.transform.position.y + 100.0f, 1.0f);
+        _object.GetComponent<TextMeshProUGUI>().DOFade(0.0f, 1.0f);
+        
+        StartCoroutine(waitToDestroy(_object));
+
+        yield return null;
+    }
+
+    IEnumerator waitToDestroy(GameObject _object)
+    {
+        yield return new WaitForSeconds(1.0f);
+        Destroy(_object);
     }
 }
