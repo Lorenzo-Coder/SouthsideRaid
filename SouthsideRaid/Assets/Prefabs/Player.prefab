@@ -134,4 +134,5 @@ MonoBehaviour:
   playerName: 
   playerScore: 0
   boss: {fileID: 0}
-  DPSPopup: {fileID: 0}
+  DPSPopup: {fileID: 7654823867994911237, guid: 7d35ba7e4cf740c41b57dae41579d9f5,
+    type: 3}
