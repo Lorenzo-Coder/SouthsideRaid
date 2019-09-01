@@ -102,7 +102,9 @@ public class BossScript : MonoBehaviour
         }
         else
         {
+            // Destroy self
             Debug.Log("Victory!");
+            Destroy(gameObject);
         }
  
     }
