@@ -10,8 +10,15 @@ public enum Stances
     Down,
 }
 
+public enum BossType
+{
+    LongArm,
+    Ape,
+}
+
 public class BossScript : MonoBehaviour
 {
+    public BossType bossType = BossType.LongArm;
     public int maxHealth = 10000;
     public int currentHealth;
     public Slider healthBar;
