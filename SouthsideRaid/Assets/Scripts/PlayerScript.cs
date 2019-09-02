@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     private float stunTimer;
     private int damageMultiplier;
     private int timesAttacked = 0;
+    public bool foundBoss;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class PlayerScript : MonoBehaviour
         joined = false;
         blocking = false;
         stunned = false;
+        foundBoss = false;
         blockTimer = timeToBlock;
         stunTimer = stunTime;
         damageMultiplier = damageMultiplierAmount;
@@ -44,6 +46,20 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (foundBoss == false)
+        {
+            boss = GameObject.FindGameObjectWithTag("Boss");
+            if (boss != null)
+            {
+                foundBoss = true;
+            }
+        }
+
+        if (boss.GetComponent<BossScript>().currentHealth <= 0)
+        {
+            foundBoss = false;
+        }
+
         if (Input.GetKeyDown(playersButton) && joined == false)
         {
             JoinGame();
