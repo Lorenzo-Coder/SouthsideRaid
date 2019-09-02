@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1357778856069381341}
   - component: {fileID: 7042687776477880681}
   - component: {fileID: 2372621810179020259}
+  - component: {fileID: 626797749931447120}
   m_Layer: 5
   m_Name: Chunk
   m_TagString: Untagged
@@ -34,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -171.70502, y: 90}
+  m_AnchoredPosition: {x: -171.705, y: -50}
   m_SizeDelta: {x: 343.41, y: 32.100006}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7042687776477880681
@@ -74,3 +75,15 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &626797749931447120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2897735679069182158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474c3227a044d304d937f91fa8994bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

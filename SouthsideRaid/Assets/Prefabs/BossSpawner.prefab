@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBossMaxHealth: 0
-  bossPrefab: {fileID: 1940430217098226738, guid: 83d5e0c616bdeee45a40bc624094bca1,
+  bossPrefab: {fileID: 3309203603198367803, guid: f3d465cead4a33445b742b236e58b09e,
     type: 3}
+  hpMultiplier: 1.5
