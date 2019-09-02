@@ -15,10 +15,13 @@ public class BossScript : MonoBehaviour
     public int maxHealth = 10000;
     public int currentHealth;
     public Slider healthBar;
+    public Image fill;
     public Stances stance = Stances.Idle;
+    public HPBarScript hpScript;
     public void dealDamage(int _damage)
     {
         currentHealth -= _damage;
+        hpScript.RemoveChunk(_damage);
     }
 
     public float idleDuration = 5.0f;
@@ -51,6 +54,7 @@ public class BossScript : MonoBehaviour
     void Update()
     {
         healthBar.value = (float)currentHealth / (float)maxHealth;
+        fill.transform.localScale = new Vector3((float)currentHealth / (float)maxHealth, fill.transform.localScale.y, fill.transform.localScale.z);
         if (currentHealth >= 0)
         {
             switch (stance)
@@ -102,7 +106,9 @@ public class BossScript : MonoBehaviour
         }
         else
         {
+            // Destroy self
             Debug.Log("Victory!");
+            Destroy(gameObject);
         }
  
     }
