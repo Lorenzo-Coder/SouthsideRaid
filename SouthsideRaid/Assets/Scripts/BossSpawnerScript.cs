@@ -5,12 +5,15 @@ using UnityEngine;
 public class BossSpawnerScript : MonoBehaviour
 {
     [SerializeField] private int currentBossMaxHealth;
-    public GameObject bossPrefab;
+    public GameObject longArmPrefab;
+    public GameObject apePrefab;
+    private BossType previousBossType;
     public float hpMultiplier = 1.5f;
 
     private void Start()
     {
         currentBossMaxHealth = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossScript>().maxHealth;
+        previousBossType = GameObject.FindGameObjectWithTag("Boss").GetComponent<BossScript>().bossType;
     }
     // Update is called once per frame
     void Update()
@@ -18,7 +21,20 @@ public class BossSpawnerScript : MonoBehaviour
         // If there is no boss spawn a new one with more hp.
         if (GameObject.FindGameObjectWithTag("Boss") == null)
         {
-            GameObject newBoss = Instantiate(bossPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            GameObject newBoss = longArmPrefab;
+            switch (previousBossType)
+            {
+                case BossType.Ape:
+                    newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
+                    previousBossType = BossType.LongArm;
+                    break;
+                case BossType.LongArm:
+                    newBoss = Instantiate(apePrefab, Vector3.zero, Quaternion.identity);
+                    previousBossType = BossType.Ape;
+
+                    break;
+                default:break;
+            }
             newBoss.GetComponent<BossScript>().maxHealth = (int)(currentBossMaxHealth * hpMultiplier);
             currentBossMaxHealth = newBoss.GetComponent<BossScript>().maxHealth;
         }
