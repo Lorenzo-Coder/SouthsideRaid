@@ -21,13 +21,14 @@ public class PlayerScript : MonoBehaviour
     public GameObject boss;
     public Canvas canvas;
     public GameObject DPSPopup;
+    public GameObject VFX;
 
     private SpriteRenderer spriteRenderer;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
     private int timesAttacked = 0;
-    public bool foundBoss;
+    private bool foundBoss;
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +56,7 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (boss.GetComponent<BossScript>().currentHealth <= 0)
+        if (boss == null)
         {
             foundBoss = false;
         }
@@ -121,8 +122,9 @@ public class PlayerScript : MonoBehaviour
         {
             boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier);
             Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
-
+            
             PopUp(true);
+            VFX.GetComponent<VFXScript>().SpawnCritFX();
 
             playerScore = playerScore + damageAmount + damageMultiplier;
             damageMultiplier = damageMultiplier * 2;
@@ -134,8 +136,9 @@ public class PlayerScript : MonoBehaviour
         else
         {
             boss.GetComponent<BossScript>().dealDamage(damageAmount);
-
+            
             PopUp(false);
+            VFX.GetComponent<VFXScript>().SpawnPunchFX();
 
             playerScore = playerScore + damageAmount;
             damageMultiplier = damageMultiplierAmount;
