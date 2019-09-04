@@ -39,7 +39,7 @@ public class PlayerScript : MonoBehaviour
     private int damageMultiplier;
     private int timesAttacked = 0;
     private bool foundBoss;
-    private PlayerAnimState CurrentAnimState;
+    [SerializeField]private PlayerAnimState CurrentAnimState;
 
     // Start is called before the first frame update
     void Start()
