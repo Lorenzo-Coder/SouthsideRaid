@@ -71,6 +71,8 @@ public class BossScript : MonoBehaviour
     public float minX = -0.25f;
     public float minY = -0.25f;
 
+    private bool startingShakeHasPlayed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +86,13 @@ public class BossScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //healthBar.value = (float)currentHealth / (float)maxHealth;
+        // Screen shake at the beginning of game
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Activate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.75 && !bossAnimator.IsInTransition(0) && !startingShakeHasPlayed)
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
+            startingShakeHasPlayed = true;
+        }
+
         fill.transform.localScale = new Vector3(Mathf.Max(0.0f,(float)currentHealth / (float)maxHealth), fill.transform.localScale.y, fill.transform.localScale.z);
         if (currentHealth > 0)
         {
@@ -147,12 +155,13 @@ public class BossScript : MonoBehaviour
             
             isCritical = false;
             bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
-            gameObject.transform.DOLocalMoveY(-2, 3.333f, false);
+            gameObject.transform.DOLocalMoveY(-2, 3.33f, false);
             // Destroy self once the animation has finished playing
             if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate")&&bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
             {
                 Debug.Log("Finished animation");
                 Destroy(gameObject);
+                GameObject.FindGameObjectWithTag("Leaderboard").GetComponent<LeaderboardScript>().IncBossLevel();
             }
             //Destroy(gameObject);
         }

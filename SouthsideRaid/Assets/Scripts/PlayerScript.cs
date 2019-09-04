@@ -39,7 +39,12 @@ public class PlayerScript : MonoBehaviour
     private int damageMultiplier;
     private int timesAttacked = 0;
     private bool foundBoss;
-    private PlayerAnimState CurrentAnimState;
+    [SerializeField]private PlayerAnimState CurrentAnimState;
+    private bool finishedSpawning = false;
+
+    //public SkinnedMeshRenderer skinnedMeshRenderer;
+    //private Vector3 myMaxBoundsCenter = Vector3.zero;
+    //private Vector3 myMaxBoundsSize = new Vector3(999999.0f, 999999.0f, 999999.0f);
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +58,14 @@ public class PlayerScript : MonoBehaviour
         damageMultiplier = damageMultiplierAmount;
         modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
         modelAnimationThing.SetActive(false);
+
+        //// setting the new mesh bounds
+        //// Get the SkinnedMeshRenderer component
+        //skinnedMeshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+
+        //// Create and set your new bounds
+        //Bounds newBounds = new Bounds(myMaxBoundsCenter, myMaxBoundsSize);
+        //skinnedMeshRenderer.localBounds = newBounds;
     }
 
     // Update is called once per frame
@@ -69,6 +82,18 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+        // bandaid fix for a rendering bug. 
+        // Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
+        if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") && 
+            playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 &&
+            !playerAnimator.IsInTransition(0)))
+            //||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
+        {
+            transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
+            playerAnimator.Play("Idle");
+            finishedSpawning = true;
+        }
+
         if (boss == null)
         {
             foundBoss = false;
@@ -79,58 +104,61 @@ public class PlayerScript : MonoBehaviour
             JoinGame();
         }
 
-        if (stunned == false)
+        if (finishedSpawning)
         {
-            if (Input.GetKeyDown(playersButton) && joined == true)
+            if (stunned == false)
             {
-                if (timesAttacked >= 1)
+                if (Input.GetKeyDown(playersButton) && joined == true)
                 {
-                    attack();
+                    if (timesAttacked >= 1)
+                    {
+                        attack();
+                    }
+                    timesAttacked++;
                 }
-                timesAttacked++;
             }
-        }
 
-        if (Input.GetKeyUp(playersButton) && joined == true)
-        {
-            blockTimer = timeToBlock;
-            blocking = false;
-            animIdle();
-        }
-
-        if (Input.GetKey(playersButton) && joined == true)
-        {
-            blockTimer -= 1.0f;
-            if (blockTimer <= 0.0f)
+            if (Input.GetKeyUp(playersButton) && joined == true)
             {
-                block();
+                blockTimer = timeToBlock;
+                blocking = false;
+                animIdle();
             }
-        }
 
-        if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
-        {
-            animHitStun();
-            stunned = true;
-        }
-
-        if (stunned == true)
-        {
-            stunTimer -= 1.0f;
-            if (stunTimer <= 0.0f)
+            if (Input.GetKey(playersButton) && joined == true)
             {
-                stunned = false;
-                stunTimer = stunTime;
+                blockTimer -= 1.0f;
+                if (blockTimer <= 0.0f)
+                {
+                    block();
+                }
             }
-        }
 
-        if (boss.GetComponent<BossScript>().currentHealth <= 0)
-        {
-            animVictory();
-        }
+            if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
+            {
+                animHitStun();
+                stunned = true;
+            }
 
-        if ((boss.GetComponent<BossScript>().stance != Stances.Down))
-        {
-            damageMultiplier = damageMultiplierAmount;
+            if (stunned == true)
+            {
+                stunTimer -= 1.0f;
+                if (stunTimer <= 0.0f)
+                {
+                    stunned = false;
+                    stunTimer = stunTime;
+                }
+            }
+
+            if (boss.GetComponent<BossScript>().currentHealth <= 0)
+            {
+                animVictory();
+            }
+
+            if ((boss.GetComponent<BossScript>().stance != Stances.Down))
+            {
+                damageMultiplier = damageMultiplierAmount;
+            }
         }
     }
 
