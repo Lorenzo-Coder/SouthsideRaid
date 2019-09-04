@@ -4,6 +4,15 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 
+public enum PlayerAnimState
+{
+    Idle,
+    Attack,
+    Block,
+    HitStun,
+    VictoryJump
+}
+
 public class PlayerScript : MonoBehaviour
 {
     public bool joined;
@@ -18,17 +27,19 @@ public class PlayerScript : MonoBehaviour
     public string playerName;
     public int playerScore = 0;
 
+    public Animator playerAnimator;
     public GameObject boss;
     public Canvas canvas;
     public GameObject DPSPopup;
     public GameObject VFX;
 
-    private SpriteRenderer spriteRenderer;
+    private GameObject modelAnimationThing;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
     private int timesAttacked = 0;
     private bool foundBoss;
+    private PlayerAnimState CurrentAnimState;
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +51,15 @@ public class PlayerScript : MonoBehaviour
         blockTimer = timeToBlock;
         stunTimer = stunTime;
         damageMultiplier = damageMultiplierAmount;
-        spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
-        spriteRenderer.enabled = false;
+        modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
+        modelAnimationThing.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //CurrentAnimState.Equals(playerAnimator.GetInteger("CurrentAnim"));
+
         if (foundBoss == false)
         {
             boss = GameObject.FindGameObjectWithTag("Boss");
@@ -70,18 +83,19 @@ public class PlayerScript : MonoBehaviour
         {
             if (Input.GetKeyDown(playersButton) && joined == true)
             {
-                if (timesAttacked >=1)
+                if (timesAttacked >= 1)
                 {
-                 attack();
+                    attack();
                 }
                 timesAttacked++;
             }
         }
 
-        if(Input.GetKeyUp(playersButton) && joined == true)
+        if (Input.GetKeyUp(playersButton) && joined == true)
         {
             blockTimer = timeToBlock;
             blocking = false;
+            animIdle();
         }
 
         if (Input.GetKey(playersButton) && joined == true)
@@ -95,6 +109,7 @@ public class PlayerScript : MonoBehaviour
 
         if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
         {
+            animHitStun();
             stunned = true;
         }
 
@@ -106,23 +121,34 @@ public class PlayerScript : MonoBehaviour
                 stunned = false;
             }
         }
+
+        if (boss.GetComponent<BossScript>().currentHealth <= 0)
+        {
+            animVictory();
+        }
+
+        if ((boss.GetComponent<BossScript>().stance != Stances.Down))
+        {
+            damageMultiplier = damageMultiplierAmount;
+        }
     }
 
     void JoinGame()
     {
-        spriteRenderer.enabled = true;
+        modelAnimationThing.SetActive(true);
         joined = true;
     }
 
     void attack()
     {
         Debug.Log("player " + playersButton + " is attacking");
+        animAttack();
 
-        if((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
+        if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
         {
             boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier);
             Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
-            
+
             PopUp(true);
             VFX.GetComponent<VFXScript>().SpawnCritFX();
 
@@ -136,7 +162,7 @@ public class PlayerScript : MonoBehaviour
         else
         {
             boss.GetComponent<BossScript>().dealDamage(damageAmount);
-            
+
             PopUp(false);
             VFX.GetComponent<VFXScript>().SpawnPunchFX();
 
@@ -148,6 +174,7 @@ public class PlayerScript : MonoBehaviour
     void block()
     {
         Debug.Log("player " + playersButton + " is blocking");
+        animBlock();
         blocking = true;
     }
 
@@ -177,7 +204,7 @@ public class PlayerScript : MonoBehaviour
     {
         _object.transform.DOMoveY(_object.transform.position.y + 100.0f, 1.0f);
         _object.GetComponent<TextMeshProUGUI>().DOFade(0.0f, 1.0f);
-        
+
         StartCoroutine(waitToDestroy(_object));
 
         yield return null;
@@ -187,5 +214,42 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         Destroy(_object);
+    }
+
+    void animAttack()
+    {
+        CurrentAnimState = PlayerAnimState.Attack;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+        playerAnimator.Play("Attack");
+        //playerAnimator.SetBool("Idle", false);
+        //playerAnimator.SetBool("Attack", true);
+        //playerAnimator.SetBool("Block", false);
+        //playerAnimator.SetBool("Stun", false);
+        //playerAnimator.SetBool("Victory", false);
+        //playerAnimator.SetBool("Hitted", false);
+    }
+
+    void animIdle()
+    {
+        CurrentAnimState = PlayerAnimState.Idle;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
+    void animHitStun()
+    {
+        CurrentAnimState = PlayerAnimState.HitStun;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
+    void animBlock()
+    {
+        CurrentAnimState = PlayerAnimState.Block;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
+    void animVictory()
+    {
+        CurrentAnimState = PlayerAnimState.VictoryJump;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
     }
 }
