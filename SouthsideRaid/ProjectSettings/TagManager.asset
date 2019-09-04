@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TimeClick
   - Boss
+  - Leaderboard
   layers:
   - Default
   - TransparentFX
