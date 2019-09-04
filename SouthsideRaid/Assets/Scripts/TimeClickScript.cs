@@ -24,24 +24,7 @@ public class TimeClickScript : MonoBehaviour
         outline.transform.localScale = new Vector3(outlineScale, outlineScale, outlineScale);
         centre.transform.localScale = new Vector3(centreScale, centreScale, centreScale);
         centre.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f);
-        //outline.transform.DOScale(centreScale / 2.0f, 2.0f);
         outline.transform.DOScale(0.0f, Random.Range(durationMin,durationMax));
-
-        //int numActivePlayers = 0;
-        //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-        //{
-        //    if (player.GetComponent<PlayerScript>().joined)
-        //    {
-        //        numActivePlayers++;
-        //    }
-        //}
-
-        //canHit = new bool[numActivePlayers];
-
-        //for (int i = 0; i < canHit.Length; i++)
-        //{
-        //    canHit[i] = true;
-        //}
     }
 
     // Update is called once per frame
