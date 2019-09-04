@@ -46,7 +46,9 @@ public class BossScript : MonoBehaviour
             // set hit animation
             if (isCritical)
             {
-                bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                bossAnimator.Play("Hit");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
             }
         }
 
@@ -83,7 +85,7 @@ public class BossScript : MonoBehaviour
     {
         //healthBar.value = (float)currentHealth / (float)maxHealth;
         fill.transform.localScale = new Vector3(Mathf.Max(0.0f,(float)currentHealth / (float)maxHealth), fill.transform.localScale.y, fill.transform.localScale.z);
-        if (currentHealth >= 0)
+        if (currentHealth > 0)
         {
             
 
@@ -142,6 +144,7 @@ public class BossScript : MonoBehaviour
         else
         {
             // Destroy self
+            isCritical = false;
             bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
             //Destroy(gameObject);
         }
