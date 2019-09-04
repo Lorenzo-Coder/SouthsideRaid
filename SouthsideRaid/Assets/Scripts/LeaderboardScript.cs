@@ -12,6 +12,9 @@ public class LeaderboardScript : MonoBehaviour
     public Text leaderboardPos5;
     private Text[] leaderboardArray;
     private int showTop = 5;
+    public Text monsterLevelText;
+    public Text playerCount;
+    public int currentBossLevel = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +36,7 @@ public class LeaderboardScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        monsterLevelText.text = currentBossLevel.ToString();
         if (!(GameObject.FindGameObjectsWithTag("Player")==null)) // cherck if there are players in the scene
         {
             GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
@@ -47,10 +51,11 @@ public class LeaderboardScript : MonoBehaviour
                     joined++;
                 }
             }
-
+            playerCount.text = joinedList.Count.ToString();
             // if more than one player has joined
             if (joined > 0)
             {
+                
                 // sort through all the players to find players with the highest score
                 joinedList.Sort(delegate (GameObject a, GameObject b)
                 {
@@ -74,5 +79,10 @@ public class LeaderboardScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void IncBossLevel()
+    {
+        currentBossLevel++;
     }
 }
