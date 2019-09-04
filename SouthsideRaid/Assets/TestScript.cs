@@ -16,19 +16,19 @@ public class TestScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            GameObject newPlayer = Instantiate(playerPrefab);
-            //newPlayer.GetComponent<PlayerScript>().JoinGame();
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    GameObject newPlayer = Instantiate(playerPrefab);
+        //    //newPlayer.GetComponent<PlayerScript>().JoinGame();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
-            for(int i = 0; i < playerList.Length; i++)
-            {
-                playerList[i].GetComponent<PlayerScript>().JoinGame();
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
+        //    for(int i = 0; i < playerList.Length; i++)
+        //    {
+        //        playerList[i].GetComponent<PlayerScript>().JoinGame();
+        //    }
+        //}
     }
 }
