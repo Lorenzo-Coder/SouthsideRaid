@@ -33,14 +33,17 @@ public class PlayerScript : MonoBehaviour
     public GameObject DPSPopup;
     public GameObject VFX;
 
+    public AudioClip[] audioClips;
+
     private GameObject modelAnimationThing;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
     private int timesAttacked = 0;
     private bool foundBoss;
-    [SerializeField]private PlayerAnimState CurrentAnimState;
+    [SerializeField] private PlayerAnimState CurrentAnimState;
     private bool finishedSpawning = false;
+    private AudioSource audioSource;
 
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     //private Vector3 myMaxBoundsCenter = Vector3.zero;
@@ -58,6 +61,7 @@ public class PlayerScript : MonoBehaviour
         damageMultiplier = damageMultiplierAmount;
         modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
         modelAnimationThing.SetActive(false);
+        audioSource = gameObject.GetComponent<AudioSource>();
 
         //// setting the new mesh bounds
         //// Get the SkinnedMeshRenderer component
@@ -84,10 +88,10 @@ public class PlayerScript : MonoBehaviour
 
         // bandaid fix for a rendering bug. 
         // Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
-        if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") && 
+        if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") &&
             playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 &&
             !playerAnimator.IsInTransition(0)))
-            //||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
+        //||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
         {
             transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
             playerAnimator.Play("Idle");
@@ -181,6 +185,8 @@ public class PlayerScript : MonoBehaviour
             PopUp(true);
             VFX.GetComponent<VFXScript>().SpawnCritFX();
 
+            audioSource.PlayOneShot(audioClips[1]);
+
             playerScore = playerScore + damageAmount + damageMultiplier;
             damageMultiplier = damageMultiplier * 2;
         }
@@ -194,6 +200,8 @@ public class PlayerScript : MonoBehaviour
 
             PopUp(false);
             VFX.GetComponent<VFXScript>().SpawnPunchFX();
+
+            audioSource.PlayOneShot(audioClips[0]);
 
             playerScore = playerScore + damageAmount;
             damageMultiplier = damageMultiplierAmount;
