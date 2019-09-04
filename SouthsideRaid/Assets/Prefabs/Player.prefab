@@ -54,7 +54,7 @@ MonoBehaviour:
   playersButton: 0
   playerName: 
   playerScore: 0
-  playerAnimator: {fileID: 0}
+  playerAnimator: {fileID: 8168000782937441236}
   boss: {fileID: 0}
   canvas: {fileID: 0}
   DPSPopup: {fileID: 7654823867994911237, guid: 7d35ba7e4cf740c41b57dae41579d9f5,
@@ -152,6 +152,12 @@ PrefabInstance:
 --- !u!4 &2292493486455123630 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 2d79801b8394022448c0198727dcff7f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6533076405487682996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8168000782937441236 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 2d79801b8394022448c0198727dcff7f,
     type: 3}
   m_PrefabInstance: {fileID: 6533076405487682996}
   m_PrefabAsset: {fileID: 0}
