@@ -16,8 +16,19 @@ public enum BossType
     Ape,
 }
 
+public enum AnimStates
+{
+    Idle = 0,
+    Attack = 1,
+    Opening = 2,
+    Hit = 3,
+    Berzerk = 4,
+    Deactivate = 8,
+}
+
 public class BossScript : MonoBehaviour
 {
+    public Animator bossAnimator;
     public BossType bossType = BossType.LongArm;
     public int maxHealth = 10000;
     public int currentHealth;
@@ -27,8 +38,18 @@ public class BossScript : MonoBehaviour
     public HPBarScript hpScript;
     public void dealDamage(int _damage)
     {
-        currentHealth -= _damage;
-        hpScript.RemoveChunk(_damage);
+        
+        if (currentHealth > 0)
+        {
+            currentHealth -= _damage;
+            hpScript.RemoveChunk(_damage);
+            // set hit animation
+            if (isCritical)
+            {
+                bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+            }
+        }
+
     }
 
     public float idleDuration = 5.0f;
@@ -60,38 +81,45 @@ public class BossScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthBar.value = (float)currentHealth / (float)maxHealth;
-        fill.transform.localScale = new Vector3((float)currentHealth / (float)maxHealth, fill.transform.localScale.y, fill.transform.localScale.z);
+        //healthBar.value = (float)currentHealth / (float)maxHealth;
+        fill.transform.localScale = new Vector3(Mathf.Max(0.0f,(float)currentHealth / (float)maxHealth), fill.transform.localScale.y, fill.transform.localScale.z);
         if (currentHealth >= 0)
         {
+            
+
             switch (stance)
             {
                 case Stances.Idle:
-                    //Debug.Log("Idle");
+                    bossAnimator.SetInteger("State", (int)AnimStates.Idle);
                     idleTimer -= Time.deltaTime;
                     if (idleTimer <= 0.0f)
                     {
                         stance = Stances.Attack;
                         idleTimer = idleDuration;
+                        bossAnimator.SetInteger("State", (int)AnimStates.Attack);
+
                     }
                     break;
                 case Stances.Attack:
                    // Debug.Log("Attack");
                     attackTimer -= Time.deltaTime;
-
+                    bossAnimator.SetInteger("State", (int)AnimStates.Attack);
 
                     if (attackTimer <= 0.0f)
                     {
                         stance = Stances.Down;
                         attackTimer = attackDuration;
+                        bossAnimator.SetInteger("State", (int)AnimStates.Opening);
                     }
                     break;
                 case Stances.Down:
-                    //Debug.Log("Down");
+                    bossAnimator.SetInteger("State", (int)AnimStates.Opening);
                     downTimer -= Time.deltaTime;
                     if (downTimer <= 0.0f && (GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
                     {
+                        bossAnimator.SetInteger("State", (int)AnimStates.Idle);
                         stance = Stances.Idle;
+                        isCritical = false;
                         downTimer = downDuration;
                     }
                     else if((GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
@@ -114,9 +142,9 @@ public class BossScript : MonoBehaviour
         else
         {
             // Destroy self
-            Debug.Log("Victory!");
-            Destroy(gameObject);
+            bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+            //Destroy(gameObject);
         }
- 
+
     }
 }
