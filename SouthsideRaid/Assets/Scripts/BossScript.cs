@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum Stances
 {
@@ -46,7 +47,9 @@ public class BossScript : MonoBehaviour
             // set hit animation
             if (isCritical)
             {
-                bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                bossAnimator.Play("Hit");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
             }
         }
 
@@ -83,7 +86,7 @@ public class BossScript : MonoBehaviour
     {
         //healthBar.value = (float)currentHealth / (float)maxHealth;
         fill.transform.localScale = new Vector3(Mathf.Max(0.0f,(float)currentHealth / (float)maxHealth), fill.transform.localScale.y, fill.transform.localScale.z);
-        if (currentHealth >= 0)
+        if (currentHealth > 0)
         {
             
 
@@ -141,8 +144,16 @@ public class BossScript : MonoBehaviour
         }
         else
         {
-            // Destroy self
+            
+            isCritical = false;
             bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+            gameObject.transform.DOLocalMoveY(-2, 3.333f, false);
+            // Destroy self once the animation has finished playing
+            if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate")&&bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
+            {
+                Debug.Log("Finished animation");
+                Destroy(gameObject);
+            }
             //Destroy(gameObject);
         }
 

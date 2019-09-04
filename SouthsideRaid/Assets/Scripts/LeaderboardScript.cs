@@ -5,14 +5,29 @@ using UnityEngine.UI;
 
 public class LeaderboardScript : MonoBehaviour
 {
-    public Text leaderboardText;
-
-    public int showTop = 4;
+    public Text leaderboardPos1;
+    public Text leaderboardPos2;
+    public Text leaderboardPos3;
+    public Text leaderboardPos4;
+    public Text leaderboardPos5;
+    private Text[] leaderboardArray;
+    private int showTop = 5;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        leaderboardPos1.text = "";
+        leaderboardPos2.text = "";
+        leaderboardPos3.text = "";
+        leaderboardPos4.text = "";
+        leaderboardPos5.text = "";
+        leaderboardArray = new Text[5];
+
+        leaderboardArray[0] = leaderboardPos1;
+        leaderboardArray[1] = leaderboardPos2;
+        leaderboardArray[2] = leaderboardPos3;
+        leaderboardArray[3] = leaderboardPos4;
+        leaderboardArray[4] = leaderboardPos5;
     }
 
     // Update is called once per frame
@@ -42,28 +57,21 @@ public class LeaderboardScript : MonoBehaviour
                     return (b.GetComponent<PlayerScript>().playerScore.CompareTo(a.GetComponent<PlayerScript>().playerScore));
                 });
 
-                // display the top X players (defined by showTop public int)
-                string tempString = "Leaderboard";
-
-                // check if there are actually four players joined
+                // check if there are actually five players joined
                 if (joinedList.Count >= showTop)
                 {
-                   for (int i = 0; i < showTop; i++)
-                   {
-                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerName + ": " + joinedList[i].GetComponent<PlayerScript>().playerScore;
-                   }
-                    
+                    for (int i = 0; i < showTop; i++)
+                    {
+                        leaderboardArray[i].text = joinedList[i].GetComponent<PlayerScript>().playerName;
+                    }
                 }
                 else
                 {
                     for (int i = 0; i < joinedList.Count; i++)
                     {
-                        tempString += "\n" + joinedList[i].GetComponent<PlayerScript>().playerName + ": " + joinedList[i].GetComponent<PlayerScript>().playerScore;
-
+                        leaderboardArray[i].text = joinedList[i].GetComponent<PlayerScript>().playerName;
                     }
                 }
-                // apply it to the leaderboard text
-                leaderboardText.text = tempString;
             }
         }
     }

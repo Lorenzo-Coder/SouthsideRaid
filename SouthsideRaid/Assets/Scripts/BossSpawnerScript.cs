@@ -22,19 +22,22 @@ public class BossSpawnerScript : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("Boss") == null)
         {
             GameObject newBoss = longArmPrefab;
-            switch (previousBossType)
-            {
-                case BossType.Ape:
-                    newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
-                    previousBossType = BossType.LongArm;
-                    break;
-                case BossType.LongArm:
-                    newBoss = Instantiate(apePrefab, Vector3.zero, Quaternion.identity);
-                    previousBossType = BossType.Ape;
 
-                    break;
-                default:break;
-            }
+            // alternate between the two boss types
+            //switch (previousBossType)
+            //{
+            //    case BossType.Ape:
+            //        newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
+            //        previousBossType = BossType.LongArm;
+            //        break;
+            //    case BossType.LongArm:
+            //        newBoss = Instantiate(apePrefab, Vector3.zero, Quaternion.identity);
+            //        previousBossType = BossType.Ape;
+
+            //        break;
+            //    default:break;
+            //}
+            newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
             newBoss.GetComponent<BossScript>().maxHealth = (int)(currentBossMaxHealth * hpMultiplier);
             currentBossMaxHealth = newBoss.GetComponent<BossScript>().maxHealth;
         }
