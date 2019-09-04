@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBossMaxHealth: 0
-  longArmPrefab: {fileID: 2555365942764686985, guid: 0e26dd6139fe7de42827cf6e22a7cc44,
+  longArmPrefab: {fileID: 5485392960684211082, guid: 4c318b8368c07524ebe02fa9481a1ac6,
     type: 3}
   apePrefab: {fileID: 3309203603198367803, guid: f3d465cead4a33445b742b236e58b09e,
     type: 3}

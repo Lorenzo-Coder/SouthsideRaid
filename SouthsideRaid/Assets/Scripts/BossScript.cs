@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum Stances
 {
@@ -143,9 +144,16 @@ public class BossScript : MonoBehaviour
         }
         else
         {
-            // Destroy self
+            
             isCritical = false;
             bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+            gameObject.transform.DOLocalMoveY(-2, 3.333f, false);
+            // Destroy self once the animation has finished playing
+            if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate")&&bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
+            {
+                Debug.Log("Finished animation");
+                Destroy(gameObject);
+            }
             //Destroy(gameObject);
         }
 
