@@ -119,6 +119,7 @@ public class PlayerScript : MonoBehaviour
             if (stunTimer <= 0.0f)
             {
                 stunned = false;
+                stunTimer = stunTime;
             }
         }
 
@@ -221,12 +222,6 @@ public class PlayerScript : MonoBehaviour
         CurrentAnimState = PlayerAnimState.Attack;
         playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
         playerAnimator.Play("Attack");
-        //playerAnimator.SetBool("Idle", false);
-        //playerAnimator.SetBool("Attack", true);
-        //playerAnimator.SetBool("Block", false);
-        //playerAnimator.SetBool("Stun", false);
-        //playerAnimator.SetBool("Victory", false);
-        //playerAnimator.SetBool("Hitted", false);
     }
 
     void animIdle()
