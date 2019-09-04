@@ -41,6 +41,10 @@ public class PlayerScript : MonoBehaviour
     private bool foundBoss;
     [SerializeField]private PlayerAnimState CurrentAnimState;
 
+    //public SkinnedMeshRenderer skinnedMeshRenderer;
+    //private Vector3 myMaxBoundsCenter = Vector3.zero;
+    //private Vector3 myMaxBoundsSize = new Vector3(999999.0f, 999999.0f, 999999.0f);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +57,14 @@ public class PlayerScript : MonoBehaviour
         damageMultiplier = damageMultiplierAmount;
         modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
         modelAnimationThing.SetActive(false);
+
+        //// setting the new mesh bounds
+        //// Get the SkinnedMeshRenderer component
+        //skinnedMeshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+
+        //// Create and set your new bounds
+        //Bounds newBounds = new Bounds(myMaxBoundsCenter, myMaxBoundsSize);
+        //skinnedMeshRenderer.localBounds = newBounds;
     }
 
     // Update is called once per frame
@@ -67,6 +79,14 @@ public class PlayerScript : MonoBehaviour
             {
                 foundBoss = true;
             }
+        }
+
+        // bandaid fix for a rendering bug. 
+        // Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
+        if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") && playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 && !playerAnimator.IsInTransition(0))
+        {
+            transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
+            playerAnimator.Play("Idle");
         }
 
         if (boss == null)

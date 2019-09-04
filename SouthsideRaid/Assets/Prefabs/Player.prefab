@@ -60,6 +60,8 @@ MonoBehaviour:
   DPSPopup: {fileID: 7654823867994911237, guid: 7d35ba7e4cf740c41b57dae41579d9f5,
     type: 3}
   VFX: {fileID: 0}
+  CurrentAnimState: 0
+  skinnedMeshRenderer: {fileID: 5115945055188731655}
 --- !u!1001 &6533076405487682996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,6 +160,12 @@ Transform:
 --- !u!95 &8168000782937441236 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 2d79801b8394022448c0198727dcff7f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6533076405487682996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5115945055188731655 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7181734470756302157, guid: 2d79801b8394022448c0198727dcff7f,
     type: 3}
   m_PrefabInstance: {fileID: 6533076405487682996}
   m_PrefabAsset: {fileID: 0}
