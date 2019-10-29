@@ -45,6 +45,12 @@ public class PlayerScript : MonoBehaviour
     private bool finishedSpawning = false;
     private AudioSource audioSource;
 
+    public int superMeter = 0;
+    public float timeToCharge = 0.2f;
+    public float timeCharged = 0.0f;
+    public SpriteRenderer superBG;
+    public SpriteRenderer superFill;
+
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     //private Vector3 myMaxBoundsCenter = Vector3.zero;
     //private Vector3 myMaxBoundsSize = new Vector3(999999.0f, 999999.0f, 999999.0f);
@@ -70,6 +76,8 @@ public class PlayerScript : MonoBehaviour
         //// Create and set your new bounds
         //Bounds newBounds = new Bounds(myMaxBoundsCenter, myMaxBoundsSize);
         //skinnedMeshRenderer.localBounds = newBounds;
+
+        UpdateSuperMeter();
     }
 
     // Update is called once per frame
@@ -124,17 +132,29 @@ public class PlayerScript : MonoBehaviour
 
             if (Input.GetKeyUp(playersButton) && joined == true)
             {
-                blockTimer = timeToBlock;
-                blocking = false;
+                //blockTimer = timeToBlock;
+                //blocking = false;
+                if (timeCharged >= 1.0f)
+                {
+                    SuperMove();
+                }
+                timeCharged = 0.0f;
+
                 animIdle();
             }
 
             if (Input.GetKey(playersButton) && joined == true)
             {
-                blockTimer -= 1.0f;
-                if (blockTimer <= 0.0f)
+                //blockTimer -= 1.0f;
+                //if (blockTimer <= 0.0f)
+                //{
+                //    block();
+                //}
+
+                // start charging SuperMove
+                if (superMeter == 100)
                 {
-                    block();
+                    timeCharged += Time.deltaTime;
                 }
             }
 
@@ -189,6 +209,10 @@ public class PlayerScript : MonoBehaviour
 
             playerScore = playerScore + damageAmount + damageMultiplier;
             damageMultiplier = damageMultiplier * 2;
+
+            // increase superMeter by 10
+            GainMeter(10);
+
         }
         else if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == false))
         {
@@ -205,6 +229,8 @@ public class PlayerScript : MonoBehaviour
 
             playerScore = playerScore + damageAmount;
             damageMultiplier = damageMultiplierAmount;
+            GainMeter();
+
         }
     }
 
@@ -282,5 +308,44 @@ public class PlayerScript : MonoBehaviour
     {
         CurrentAnimState = PlayerAnimState.VictoryJump;
         playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
+    void GainMeter()
+    {
+        superMeter++;
+        superMeter = Mathf.Clamp(superMeter, 0, 100);
+        Debug.Log("GainMeter++ ");
+        UpdateSuperMeter();
+    }
+
+    void GainMeter(int _i)
+    {
+        superMeter += _i;
+        superMeter = Mathf.Clamp(superMeter, 0, 100);
+        Debug.Log("GainMeter + " + _i);
+        UpdateSuperMeter();
+    }
+
+    void SuperMove()
+    {
+        BossScript bossScript = boss.GetComponent<BossScript>();
+        // deal up to 10% of the bosses maximum hp as damage depending on how long the player charged for
+        bossScript.dealDamage(bossScript.maxHealth * 0.1f * (timeCharged - 1.0f) / 2.0f);
+
+        // deplete the superMeter
+        superMeter = 0;
+        UpdateSuperMeter();
+    }
+
+    void UpdateSuperMeter()
+    {
+        superFill.transform.localScale = new Vector3(superBG.transform.localScale.x * superMeter / 100.0f, superFill.transform.localScale.y, superFill.transform.localScale.z);
+        if (superMeter == 100)
+        {
+            superFill.color = new Color(0, 255, 0);
+        }
+        else
+            superFill.color = new Color(255, 0, 0);
+
     }
 }

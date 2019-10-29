@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossSpawnerScript : MonoBehaviour
 {
-    [SerializeField] private int currentBossMaxHealth;
+    [SerializeField] private float currentBossMaxHealth;
     public GameObject longArmPrefab;
     public GameObject apePrefab;
     private BossType previousBossType;

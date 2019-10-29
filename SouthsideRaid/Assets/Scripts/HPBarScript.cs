@@ -29,7 +29,7 @@ public class HPBarScript : MonoBehaviour
     }
 
     // this is called whenever boss takes damage
-    public void RemoveChunk(int _damage)
+    public void RemoveChunk(float _damage)
     {
         // get the scale
         float scaleX = (float)_damage / (float)boss.GetComponent<BossScript>().maxHealth;
