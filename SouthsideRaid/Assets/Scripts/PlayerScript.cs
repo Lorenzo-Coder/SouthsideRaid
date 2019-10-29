@@ -339,13 +339,23 @@ public class PlayerScript : MonoBehaviour
 
     void UpdateSuperMeter()
     {
+        // fill the meter
         superFill.transform.localScale = new Vector3(superBG.transform.localScale.x * superMeter / 100.0f, superFill.transform.localScale.y, superFill.transform.localScale.z);
+
+        // if full change color to green
         if (superMeter == 100)
         {
             superFill.color = new Color(0, 255, 0);
         }
+        // else its red
         else
             superFill.color = new Color(255, 0, 0);
 
+    }
+
+    void GetHit()
+    {
+        // lose 10 points of mana
+        GainMeter(-10);
     }
 }
