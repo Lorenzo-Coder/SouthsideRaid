@@ -31,13 +31,13 @@ public class BossScript : MonoBehaviour
 {
     public Animator bossAnimator;
     public BossType bossType = BossType.LongArm;
-    public int maxHealth = 10000;
-    public int currentHealth;
+    public float maxHealth = 10000;
+    public float currentHealth;
     public Slider healthBar;
     public Image fill;
     public Stances stance = Stances.Idle;
     public HPBarScript hpScript;
-    public void dealDamage(int _damage)
+    public void dealDamage(float _damage)
     {
         
         if (currentHealth > 0)
