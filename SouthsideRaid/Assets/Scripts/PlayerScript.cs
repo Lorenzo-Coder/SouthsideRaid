@@ -329,8 +329,9 @@ public class PlayerScript : MonoBehaviour
     void SuperMove()
     {
         BossScript bossScript = boss.GetComponent<BossScript>();
-        // deal up to 10% of the bosses maximum hp as damage depending on how long the player charged for
-        bossScript.dealDamage(bossScript.maxHealth * 0.1f * (timeCharged - 1.0f) / 2.0f);
+        timeCharged = Mathf.Clamp(timeCharged, 1.0f, 3.0f);
+        // deal up to 25% of the bosses maximum hp as damage depending on how long the player charged for
+        bossScript.dealDamage(bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f);
 
         // deplete the superMeter
         superMeter = 0;
