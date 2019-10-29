@@ -33,13 +33,17 @@ public class PlayerScript : MonoBehaviour
     public GameObject DPSPopup;
     public GameObject VFX;
 
+    public AudioClip[] audioClips;
+
     private GameObject modelAnimationThing;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
     private int timesAttacked = 0;
     private bool foundBoss;
-    [SerializeField]private PlayerAnimState CurrentAnimState;
+    [SerializeField] private PlayerAnimState CurrentAnimState;
+    private bool finishedSpawning = false;
+    private AudioSource audioSource;
 
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     //private Vector3 myMaxBoundsCenter = Vector3.zero;
@@ -57,6 +61,7 @@ public class PlayerScript : MonoBehaviour
         damageMultiplier = damageMultiplierAmount;
         modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
         modelAnimationThing.SetActive(false);
+        audioSource = gameObject.GetComponent<AudioSource>();
 
         //// setting the new mesh bounds
         //// Get the SkinnedMeshRenderer component
@@ -83,10 +88,14 @@ public class PlayerScript : MonoBehaviour
 
         // bandaid fix for a rendering bug. 
         // Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
-        if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") && playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 && !playerAnimator.IsInTransition(0))
+        if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") &&
+            playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 &&
+            !playerAnimator.IsInTransition(0)))
+        //||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
         {
             transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
             playerAnimator.Play("Idle");
+            finishedSpawning = true;
         }
 
         if (boss == null)
@@ -99,58 +108,61 @@ public class PlayerScript : MonoBehaviour
             JoinGame();
         }
 
-        if (stunned == false)
+        if (finishedSpawning)
         {
-            if (Input.GetKeyDown(playersButton) && joined == true)
+            if (stunned == false)
             {
-                if (timesAttacked >= 1)
+                if (Input.GetKeyDown(playersButton) && joined == true)
                 {
-                    attack();
+                    if (timesAttacked >= 1)
+                    {
+                        attack();
+                    }
+                    timesAttacked++;
                 }
-                timesAttacked++;
             }
-        }
 
-        if (Input.GetKeyUp(playersButton) && joined == true)
-        {
-            blockTimer = timeToBlock;
-            blocking = false;
-            animIdle();
-        }
-
-        if (Input.GetKey(playersButton) && joined == true)
-        {
-            blockTimer -= 1.0f;
-            if (blockTimer <= 0.0f)
+            if (Input.GetKeyUp(playersButton) && joined == true)
             {
-                block();
+                blockTimer = timeToBlock;
+                blocking = false;
+                animIdle();
             }
-        }
 
-        if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
-        {
-            animHitStun();
-            stunned = true;
-        }
-
-        if (stunned == true)
-        {
-            stunTimer -= 1.0f;
-            if (stunTimer <= 0.0f)
+            if (Input.GetKey(playersButton) && joined == true)
             {
-                stunned = false;
-                stunTimer = stunTime;
+                blockTimer -= 1.0f;
+                if (blockTimer <= 0.0f)
+                {
+                    block();
+                }
             }
-        }
 
-        if (boss.GetComponent<BossScript>().currentHealth <= 0)
-        {
-            animVictory();
-        }
+            if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
+            {
+                animHitStun();
+                stunned = true;
+            }
 
-        if ((boss.GetComponent<BossScript>().stance != Stances.Down))
-        {
-            damageMultiplier = damageMultiplierAmount;
+            if (stunned == true)
+            {
+                stunTimer -= 1.0f;
+                if (stunTimer <= 0.0f)
+                {
+                    stunned = false;
+                    stunTimer = stunTime;
+                }
+            }
+
+            if (boss.GetComponent<BossScript>().currentHealth <= 0)
+            {
+                animVictory();
+            }
+
+            if ((boss.GetComponent<BossScript>().stance != Stances.Down))
+            {
+                damageMultiplier = damageMultiplierAmount;
+            }
         }
     }
 
@@ -173,6 +185,8 @@ public class PlayerScript : MonoBehaviour
             PopUp(true);
             VFX.GetComponent<VFXScript>().SpawnCritFX();
 
+            audioSource.PlayOneShot(audioClips[1]);
+
             playerScore = playerScore + damageAmount + damageMultiplier;
             damageMultiplier = damageMultiplier * 2;
         }
@@ -186,6 +200,8 @@ public class PlayerScript : MonoBehaviour
 
             PopUp(false);
             VFX.GetComponent<VFXScript>().SpawnPunchFX();
+
+            audioSource.PlayOneShot(audioClips[0]);
 
             playerScore = playerScore + damageAmount;
             damageMultiplier = damageMultiplierAmount;

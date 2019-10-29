@@ -20,6 +20,13 @@ public class CameraScript : MonoBehaviour
         //{
         //    CameraShake();
         //}
+
+        if (Input.GetKeyDown(KeyCode.Escape)||Input.GetKeyDown(KeyCode.Q))
+        {
+            Application.Quit();
+        }
+
+        // resetting camera to initial position
         transform.position = initCamPos;
     }
 

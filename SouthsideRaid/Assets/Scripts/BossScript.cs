@@ -73,6 +73,9 @@ public class BossScript : MonoBehaviour
 
     private bool startingShakeHasPlayed = false;
 
+    public AudioClip[] audioClips;
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +84,11 @@ public class BossScript : MonoBehaviour
         attackTimer = attackDuration;
         downTimer = downDuration;
         currentHealth = maxHealth;
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioClips[0]);
+        }
     }
 
     // Update is called once per frame
@@ -115,12 +123,15 @@ public class BossScript : MonoBehaviour
                    // Debug.Log("Attack");
                     attackTimer -= Time.deltaTime;
                     bossAnimator.SetInteger("State", (int)AnimStates.Attack);
-
                     if (attackTimer <= 0.0f)
                     {
                         stance = Stances.Down;
                         attackTimer = attackDuration;
                         bossAnimator.SetInteger("State", (int)AnimStates.Opening);
+                    }
+                    if (!audioSource.isPlaying)
+                    {
+                        audioSource.PlayOneShot(audioClips[1]);
                     }
                     break;
                 case Stances.Down:
@@ -145,6 +156,11 @@ public class BossScript : MonoBehaviour
                         isCritical = GameObject.FindGameObjectWithTag("TimeClick").GetComponent<TimeClickScript>().canHit;
                     }
 
+                    if (!audioSource.isPlaying)
+                    {
+                        audioSource.PlayOneShot(audioClips[5]);
+                    }
+
                     break;
                 default:
                     break;
@@ -162,6 +178,11 @@ public class BossScript : MonoBehaviour
                 Debug.Log("Finished animation");
                 Destroy(gameObject);
                 GameObject.FindGameObjectWithTag("Leaderboard").GetComponent<LeaderboardScript>().IncBossLevel();
+            }
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(audioClips[6]);
+                audioSource.PlayOneShot(audioClips[2]);
             }
             //Destroy(gameObject);
         }

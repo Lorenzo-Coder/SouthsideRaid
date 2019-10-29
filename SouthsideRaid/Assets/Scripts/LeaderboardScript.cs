@@ -15,6 +15,13 @@ public class LeaderboardScript : MonoBehaviour
     public Text monsterLevelText;
     public Text playerCount;
     public int currentBossLevel = 0;
+    public Sprite buttonUp;
+    public Sprite buttonDown;
+    public Text helperText;
+    public Image buttonImage;
+    public float frameTime = 0.25f;
+    public float frameTimer = 0.0f;
+    private bool isButtonUp = true;
 
     // Start is called before the first frame update
     void Start()
@@ -79,10 +86,70 @@ public class LeaderboardScript : MonoBehaviour
                 }
             }
         }
+
+        // for changing the button and text helpers
+        if (GameObject.FindGameObjectWithTag("Boss")!= null)
+        {
+            GameObject boss = GameObject.FindGameObjectWithTag("Boss");
+            if (boss.GetComponent<BossScript>().stance == Stances.Idle)
+            {
+                helperText.text = "Let's Get Crazy";
+                //resetButton();
+                clickAnimation();
+            }
+            else if (boss.GetComponent<BossScript>().stance == Stances.Attack)
+            {
+                helperText.text = "Hold to Block";
+                buttonImage.sprite = buttonDown;
+            }
+            else if (boss.GetComponent<BossScript>().stance == Stances.Down)
+            {
+                if (boss.GetComponent<BossScript>().isCritical)
+                {
+                    helperText.text = "SPAM";
+                    //resetButton
+                    clickAnimation();
+                }
+                else
+                {
+                    helperText.text = "Wait for it";
+                    resetButton();
+                }
+            }
+           
+            else
+            {
+                resetButton();
+            }
+
+        }
     }
 
     public void IncBossLevel()
     {
         currentBossLevel++;
+    }
+    private void resetButton()
+    {
+        frameTimer = 0.0f;
+        buttonImage.sprite = buttonUp;
+        isButtonUp = true;
+    }
+    private void clickAnimation()
+    {
+        frameTimer += Time.deltaTime;
+        if (frameTimer >= frameTime)
+        {
+            if(isButtonUp)
+            {
+                buttonImage.sprite = buttonDown;
+            }
+            else
+            {
+                buttonImage.sprite = buttonUp;
+            }
+            isButtonUp = !isButtonUp;
+            frameTimer = 0.0f;
+        }
     }
 }
