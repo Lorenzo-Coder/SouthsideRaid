@@ -61,7 +61,9 @@ MonoBehaviour:
   DPSPopup: {fileID: 7654823867994911237, guid: 7d35ba7e4cf740c41b57dae41579d9f5,
     type: 3}
   VFX: {fileID: 0}
-  audioClips: []
+  audioClips:
+  - {fileID: 8300000, guid: 9bcea810dc69ea04f91220f129e613e2, type: 3}
+  - {fileID: 8300000, guid: 35562ca401569a348b7030d63e099bc1, type: 3}
   CurrentAnimState: 0
 --- !u!82 &2843503580377443064
 AudioSource:
@@ -171,6 +173,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: -7181734470756302157, guid: 2d79801b8394022448c0198727dcff7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 52650d52fbb12f841adfb8868810740b, type: 2}
     - target: {fileID: -6057140222963153312, guid: 2d79801b8394022448c0198727dcff7f,
         type: 3}
       propertyPath: m_Controller
