@@ -25,11 +25,16 @@ public class PlayerScript : MonoBehaviour
     public bool joined;
     public bool blocking;
     public bool stunned;
+    public bool invincible;
+    public bool canSwitchLane;
     public float timeToBlock = 20.0f;
     public float stunTime = 120.0f;
+    public float iFrameLength = 0.2f;
+    public float laneSwitchCooldown = 0.3f;
     public int damageMultiplierAmount = 25;
     public int damageAmount = 100;
     public KeyCode playersButton;
+    public KeyCode playersDodgeButton;
     public PlayerLaneState playersLane = PlayerLaneState.Middle;
 
     public string playerName;
@@ -40,11 +45,11 @@ public class PlayerScript : MonoBehaviour
     public Canvas canvas;
     public GameObject DPSPopup;
     public GameObject VFX;
-    public GameObject[] LaneCentres;
 
     public AudioClip[] audioClips;
 
     private GameObject modelAnimationThing;
+    private Vector3 initialPosition;
     private float blockTimer;
     private float stunTimer;
     private int damageMultiplier;
@@ -71,13 +76,19 @@ public class PlayerScript : MonoBehaviour
         joined = false;
         blocking = false;
         stunned = false;
+        invincible = false;
         foundBoss = false;
+        canSwitchLane = true;
         blockTimer = timeToBlock;
         stunTimer = stunTime;
         damageMultiplier = damageMultiplierAmount;
         modelAnimationThing = gameObject.transform.GetChild(0).gameObject;
         modelAnimationThing.SetActive(false);
         audioSource = gameObject.GetComponent<AudioSource>();
+        initialPosition = gameObject.transform.position;
+
+        //set starting position
+        //gameObject.transform.position = new Vector3(LaneNodes[1].gameObject.transform.position.x, LaneNodes[1].gameObject.transform.position.y, gameObject.transform.position.y);
 
         //// setting the new mesh bounds
         //// Get the SkinnedMeshRenderer component
@@ -153,6 +164,11 @@ public class PlayerScript : MonoBehaviour
                 animIdle();
             }
 
+            if (Input.GetKeyUp(playersDodgeButton) && joined == true)
+            {
+                SwitchLanes();
+            }
+
             if (Input.GetKey(playersButton) && joined == true)
             {
                 //blockTimer -= 1.0f;
@@ -168,7 +184,7 @@ public class PlayerScript : MonoBehaviour
                 }
             }
 
-            if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false))
+            if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false) && (invincible == false))
             {
                 animHitStun();
                 stunned = true;
@@ -372,49 +388,72 @@ public class PlayerScript : MonoBehaviour
 
     void SwitchLanes()
     {
-        switch (playersLane)
+        if (canSwitchLane)
         {
-            case PlayerLaneState.Left:
-                playersLane = PlayerLaneState.Middle;
-                laneDirection = false;
-                //move player to other position
-                //make player invicible for abit
-                break;
-            case PlayerLaneState.Middle:
-                if (laneDirection)
-                {
-                    playersLane = PlayerLaneState.Left;
-                }
-                else
-                { 
-                    playersLane = PlayerLaneState.Right;
-                }
-                //make player invicible for abit
-                //move player to other position
-                break;
-            case PlayerLaneState.Right:
-                playersLane = PlayerLaneState.Middle;
-                laneDirection = true;
-                //make player invicible for abit
-                //move player to other position
-                break;
+            switch (playersLane)
+            {
+                case PlayerLaneState.Left:
+                    playersLane = PlayerLaneState.Middle;
+                    laneDirection = false;
+                    StartCoroutine(movePlayerMiddle());
+                    StartCoroutine(iFrameCountdown());
+                    break;
+                case PlayerLaneState.Middle:
+                    if (laneDirection)
+                    {
+                        playersLane = PlayerLaneState.Left;
+                        StartCoroutine(movePlayerLeft());
+                    }
+                    else
+                    {
+                        playersLane = PlayerLaneState.Right;
+                        StartCoroutine(movePlayerRight());
+                    }
+                    StartCoroutine(iFrameCountdown());
+                    break;
+                case PlayerLaneState.Right:
+                    playersLane = PlayerLaneState.Middle;
+                    laneDirection = true;
+                    StartCoroutine(movePlayerMiddle());
+                    StartCoroutine(iFrameCountdown());
+                    break;
+            }
+
+            StartCoroutine(laneSwitchCountdown());
         }
+    }
+
+    IEnumerator iFrameCountdown()
+    {
+        invincible = true;
+        yield return new WaitForSeconds(iFrameLength);
+        invincible = false;
+    }
+
+    IEnumerator laneSwitchCountdown()
+    {
+        canSwitchLane = false;
+        yield return new WaitForSeconds(laneSwitchCooldown);
+        canSwitchLane = true;
     }
 
     IEnumerator movePlayerLeft()
     {
-        //gameObject.transform.DOMoveX()
+        gameObject.transform.DOLocalJump(new Vector3(gameObject.transform.position.x - 5.0f, gameObject.transform.position.y, 
+            gameObject.transform.position.z), 1.0f, 1, 0.3f, false);
         yield return null;
     }
 
     IEnumerator movePlayerMiddle()
     {
-
+        gameObject.transform.DOLocalJump(new Vector3(initialPosition.x, gameObject.transform.position.y,
+            gameObject.transform.position.z), 1.0f, 1, 0.3f, false);
         yield return null;
     }
     IEnumerator movePlayerRight()
     {
-
+        gameObject.transform.DOLocalJump(new Vector3(gameObject.transform.position.x + 5.0f, gameObject.transform.position.y,
+            gameObject.transform.position.z), 1.0f, 1, 0.3f, false);
         yield return null;
     }
 }
