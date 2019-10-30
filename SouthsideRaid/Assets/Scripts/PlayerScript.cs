@@ -13,6 +13,13 @@ public enum PlayerAnimState
     VictoryJump
 }
 
+public enum PlayerLaneState
+{
+    Left,
+    Middle, 
+    Right
+}
+
 public class PlayerScript : MonoBehaviour
 {
     public bool joined;
@@ -23,6 +30,7 @@ public class PlayerScript : MonoBehaviour
     public int damageMultiplierAmount = 25;
     public int damageAmount = 100;
     public KeyCode playersButton;
+    public PlayerLaneState playersLane = PlayerLaneState.Middle;
 
     public string playerName;
     public int playerScore = 0;
@@ -32,6 +40,7 @@ public class PlayerScript : MonoBehaviour
     public Canvas canvas;
     public GameObject DPSPopup;
     public GameObject VFX;
+    public GameObject[] LaneCentres;
 
     public AudioClip[] audioClips;
 
@@ -44,6 +53,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private PlayerAnimState CurrentAnimState;
     private bool finishedSpawning = false;
     private AudioSource audioSource;
+    private bool laneDirection = true; //true is left, false is right
 
     public int superMeter = 0;
     public float timeToCharge = 0.2f;
@@ -358,5 +368,53 @@ public class PlayerScript : MonoBehaviour
     {
         // lose 10 points of mana
         GainMeter(-10);
+    }
+
+    void SwitchLanes()
+    {
+        switch (playersLane)
+        {
+            case PlayerLaneState.Left:
+                playersLane = PlayerLaneState.Middle;
+                laneDirection = false;
+                //move player to other position
+                //make player invicible for abit
+                break;
+            case PlayerLaneState.Middle:
+                if (laneDirection)
+                {
+                    playersLane = PlayerLaneState.Left;
+                }
+                else
+                { 
+                    playersLane = PlayerLaneState.Right;
+                }
+                //make player invicible for abit
+                //move player to other position
+                break;
+            case PlayerLaneState.Right:
+                playersLane = PlayerLaneState.Middle;
+                laneDirection = true;
+                //make player invicible for abit
+                //move player to other position
+                break;
+        }
+    }
+
+    IEnumerator movePlayerLeft()
+    {
+        //gameObject.transform.DOMoveX()
+        yield return null;
+    }
+
+    IEnumerator movePlayerMiddle()
+    {
+
+        yield return null;
+    }
+    IEnumerator movePlayerRight()
+    {
+
+        yield return null;
     }
 }
