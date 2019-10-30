@@ -10,7 +10,9 @@ public enum PlayerAnimState
     Attack,
     Block,
     HitStun,
-    VictoryJump
+    VictoryJump,
+    Charging,
+    Switch,
 }
 
 public enum PlayerLaneState
@@ -51,7 +53,7 @@ public class PlayerScript : MonoBehaviour
     private int timesAttacked = 0;
     private bool foundBoss;
     [SerializeField] private PlayerAnimState CurrentAnimState;
-    private bool finishedSpawning = false;
+    private bool finishedSpawning = true;
     private AudioSource audioSource;
     private bool laneDirection = true; //true is left, false is right
 
@@ -101,20 +103,21 @@ public class PlayerScript : MonoBehaviour
             if (boss != null)
             {
                 foundBoss = true;
+                animIdle();
             }
         }
 
-        // bandaid fix for a rendering bug. 
-        // Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
-        if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") &&
-            playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 &&
-            !playerAnimator.IsInTransition(0)))
-        //||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
-        {
-            transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
-            playerAnimator.Play("Idle");
-            finishedSpawning = true;
-        }
+        //// bandaid fix for a rendering bug. 
+        //// Set the each player to be on ~-9.5 on the y axis so that Unity will render it and the animation "looks" right.
+        //if ((playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer") &&
+        //    playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 &&
+        //    !playerAnimator.IsInTransition(0)))
+        ////||(!playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("SpawnPlayer")))
+        //{
+        //    transform.position = new Vector3(transform.position.x, -3.5f, transform.position.z);
+        //    playerAnimator.Play("Idle");
+        //    finishedSpawning = true;
+        //}
 
         if (boss == null)
         {
@@ -137,6 +140,10 @@ public class PlayerScript : MonoBehaviour
                         attack();
                     }
                     timesAttacked++;
+                }
+                else
+                {
+                    animIdle();
                 }
             }
 
@@ -165,6 +172,7 @@ public class PlayerScript : MonoBehaviour
                 if (superMeter == 100)
                 {
                     timeCharged += Time.deltaTime;
+                    animCharge();
                 }
             }
 
@@ -179,6 +187,7 @@ public class PlayerScript : MonoBehaviour
                 stunTimer -= 1.0f;
                 if (stunTimer <= 0.0f)
                 {
+                    animIdle();
                     stunned = false;
                     stunTimer = stunTime;
                 }
@@ -188,6 +197,12 @@ public class PlayerScript : MonoBehaviour
             {
                 animVictory();
             }
+
+            //if (CurrentAnimState == PlayerAnimState.VictoryJump && playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
+            //{
+            //    animIdle();
+            //    Debug.Log("It called it!");
+            //}
 
             if ((boss.GetComponent<BossScript>().stance != Stances.Down))
             {
@@ -200,6 +215,8 @@ public class PlayerScript : MonoBehaviour
     {
         modelAnimationThing.SetActive(true);
         joined = true;
+        transform.DOLocalMoveY(-3.86f, 0.2f, false);
+        animSwitch();
     }
 
     void attack()
@@ -227,6 +244,7 @@ public class PlayerScript : MonoBehaviour
         else if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == false))
         {
             damageMultiplier = damageMultiplierAmount;
+            GainMeter();
         }
         else
         {
@@ -320,6 +338,18 @@ public class PlayerScript : MonoBehaviour
         playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
     }
 
+    void animCharge()
+    {
+        CurrentAnimState = PlayerAnimState.Charging;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
+    void animSwitch()
+    {
+        CurrentAnimState = PlayerAnimState.Switch;
+        playerAnimator.SetInteger("CurrentAnim", (int)CurrentAnimState);
+    }
+
     void GainMeter()
     {
         superMeter++;
@@ -340,8 +370,13 @@ public class PlayerScript : MonoBehaviour
     {
         BossScript bossScript = boss.GetComponent<BossScript>();
         timeCharged = Mathf.Clamp(timeCharged, 1.0f, 3.0f);
+        float superDamage = bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f;
+
+
         // deal up to 25% of the bosses maximum hp as damage depending on how long the player charged for
-        bossScript.dealDamage(bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f);
+        //bossScript.dealDamage(bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f);
+
+        StartCoroutine(DamageDelay(0.6f, superDamage));
 
         // deplete the superMeter
         superMeter = 0;
@@ -416,5 +451,12 @@ public class PlayerScript : MonoBehaviour
     {
 
         yield return null;
+    }
+
+    IEnumerator DamageDelay( float _delay, float _damage)
+    {
+        yield return new WaitForSeconds(_delay);
+        boss.GetComponent<BossScript>().dealDamage(_damage);
+        //StopCoroutine(DamageDelay);
     }
 }
