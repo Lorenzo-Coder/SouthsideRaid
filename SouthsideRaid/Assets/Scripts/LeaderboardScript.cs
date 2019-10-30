@@ -2,6 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+
+public class ScoreSet
+{
+    public GameObject AttachedPlayer;
+    public Text AttachedText;
+    public int ScoreEasyAccess = 0;
+    public void UpdateText()
+    { //joinedList[i].GetComponent<PlayerScript>().playerName + "  " + joinedList[i].GetComponent<PlayerScript>().playerScore
+        AttachedText.text = AttachedPlayer.GetComponent<PlayerScript>().playerName + "  " + AttachedPlayer.GetComponent<PlayerScript>().playerScore;
+        ScoreEasyAccess = AttachedPlayer.GetComponent<PlayerScript>().playerScore;
+    }
+}
 
 public class LeaderboardScript : MonoBehaviour
 {
@@ -9,16 +22,24 @@ public class LeaderboardScript : MonoBehaviour
     public Text leaderboardPos2;
     public Text leaderboardPos3;
     public Text leaderboardPos4;
-    public Text leaderboardPos5;
+
+    private Vector3[] originalPos;
+    private Vector3[] originalScale;
+
+    private List<ScoreSet> HighScoreSet;
+
     private Text[] leaderboardArray;
-    private int showTop = 5;
+    private int showTop = 4;
+
     public Text monsterLevelText;
     public Text playerCount;
-    public int currentBossLevel = 0;
     public Sprite buttonUp;
     public Sprite buttonDown;
     public Text helperText;
     public Image buttonImage;
+
+    public int currentBossLevel = 0;
+
     public float frameTime = 0.25f;
     public float frameTimer = 0.0f;
     private bool isButtonUp = true;
@@ -26,68 +47,80 @@ public class LeaderboardScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        leaderboardPos1.text = "";
-        leaderboardPos2.text = "";
-        leaderboardPos3.text = "";
-        leaderboardPos4.text = "";
-        leaderboardPos5.text = "";
-        leaderboardArray = new Text[5];
-
+        leaderboardArray = new Text[4];
         leaderboardArray[0] = leaderboardPos1;
         leaderboardArray[1] = leaderboardPos2;
         leaderboardArray[2] = leaderboardPos3;
         leaderboardArray[3] = leaderboardPos4;
-        leaderboardArray[4] = leaderboardPos5;
+
+        
+        HighScoreSet = new List<ScoreSet>();
+        GameObject[] getPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < showTop; i++)
+        {
+            ScoreSet tempSet = new ScoreSet();
+            tempSet.AttachedPlayer = getPlayers[i];
+            tempSet.AttachedText = leaderboardArray[i];
+            tempSet.AttachedText.gameObject.SetActive(false);
+            tempSet.AttachedText.text = "";
+
+            HighScoreSet.Add(tempSet);
+        }
+
+        originalPos = new Vector3[4];
+        originalScale = new Vector3[4];
+        originalPos[0] = leaderboardPos1.transform.localPosition;
+        originalScale[0] = leaderboardPos1.transform.localScale;
+        originalPos[1] = leaderboardPos2.transform.localPosition;
+        originalScale[2] = leaderboardPos2.transform.localScale;
+        originalPos[2] = leaderboardPos3.transform.localPosition;
+        originalScale[3] = leaderboardPos3.transform.localScale;
+        originalPos[3] = leaderboardPos4.transform.localPosition;
+        //originalScale[4] = leaderboardPos4.transform.localScale;
+
     }
+
+    private List<GameObject> oldJoined = new List<GameObject>();
 
     // Update is called once per frame
     void Update()
     {
         monsterLevelText.text = currentBossLevel.ToString();
-        if (!(GameObject.FindGameObjectsWithTag("Player")==null)) // cherck if there are players in the scene
+
+        if (GameObject.FindGameObjectsWithTag("Player") != null) // cherck if there are players in the scene
         {
-            GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
             // check if any of them have joined
             int joined = 0;
-            List<GameObject> joinedList = new List<GameObject>();
-            for (int i = 0; i < playerList.Length; i++)
+            //List<GameObject> joinedList = new List<GameObject>();
+            for (int i = 0; i < HighScoreSet.Count; i++)
             {
-                if (playerList[i].GetComponent<PlayerScript>().joined)
+                if (HighScoreSet[i].AttachedPlayer.GetComponent<PlayerScript>().joined)
                 {
-                    joinedList.Add(playerList[i]);
+                    HighScoreSet[i].AttachedText.gameObject.SetActive(true);
                     joined++;
                 }
             }
-            playerCount.text = joinedList.Count.ToString();
-            // if more than one player has joined
-            if (joined > 0)
-            {
-                
-                // sort through all the players to find players with the highest score
-                joinedList.Sort(delegate (GameObject a, GameObject b)
-                {
-                    return (b.GetComponent<PlayerScript>().playerScore.CompareTo(a.GetComponent<PlayerScript>().playerScore));
-                });
 
-                // check if there are actually five players joined
-                if (joinedList.Count >= showTop)
-                {
-                    for (int i = 0; i < showTop; i++)
-                    {
-                        leaderboardArray[i].text = joinedList[i].GetComponent<PlayerScript>().playerName;
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < joinedList.Count; i++)
-                    {
-                        leaderboardArray[i].text = joinedList[i].GetComponent<PlayerScript>().playerName;
-                    }
-                }
+            for (int i = 0; i < HighScoreSet.Count; i++)
+            {
+                HighScoreSet[i].UpdateText();
+            }
+
+            // sort through all the players to find players with the highest score
+            HighScoreSet.Sort(delegate (ScoreSet a, ScoreSet b)
+            {
+                return (b.ScoreEasyAccess.CompareTo(a.ScoreEasyAccess));
+            });
+
+            for (int i = 0; i < HighScoreSet.Count; i++)
+            {
+                HighScoreSet[i].AttachedText.transform.DOLocalMove(originalPos[i], 0.2f);
+                //HighScoreSet[i].AttachedText.transform.DOScale(originalScale[i], 0.2f);
             }
         }
 
-        // for changing the button and text helpers
+
         if (GameObject.FindGameObjectWithTag("Boss")!= null)
         {
             GameObject boss = GameObject.FindGameObjectWithTag("Boss");
