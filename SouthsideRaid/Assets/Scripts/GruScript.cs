@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class GruScript : BossScript
 {
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    base.Start();
-    //}
+    bool leftBarrierActive = true;
+    bool rightBarrierActive = true;
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    base.Update();
-    //}
+    // Start is called before the first frame update
+    void Start()
+    {
+        base.Start();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        base.Update();
+    }
+
+    protected override void Attack()
+    {
+        Debug.Log("GRU ATTACK");
+    }
 
     //public void dealDamage(float _damage)
     //{
