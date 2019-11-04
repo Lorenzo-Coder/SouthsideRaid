@@ -37,23 +37,7 @@ public class BossScript : MonoBehaviour
     public Image fill;
     public Stances stance = Stances.Idle;
     public HPBarScript hpScript;
-    public virtual void dealDamage(float _damage)
-    {
-        
-        if (currentHealth > 0)
-        {
-            currentHealth -= _damage;
-            hpScript.RemoveChunk(_damage);
-            // set hit animation
-            if (isCritical)
-            {
-                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
-                bossAnimator.Play("Hit");
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
-            }
-        }
-
-    }
+  
 
     public float idleDuration = 5.0f;
     public float attackDuration = 2.0f;
@@ -208,5 +192,25 @@ public class BossScript : MonoBehaviour
             audioSource.PlayOneShot(audioClips[6]);
             audioSource.PlayOneShot(audioClips[2]);
         }
+    }
+
+    public virtual float dealDamage(float _damage, PlayerLaneState _playerLane)
+    {
+
+        if (currentHealth > 0)
+        {
+            currentHealth -= _damage;
+            hpScript.RemoveChunk(_damage);
+            // set hit animation
+            if (isCritical)
+            {
+                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                bossAnimator.Play("Hit");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
+            }
+            return _damage;
+        }
+
+        return 0.0f;
     }
 }
