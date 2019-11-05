@@ -178,7 +178,9 @@ public class BossScript : MonoBehaviour
     protected virtual void Die()
     {
         isCritical = false;
-        bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+        //bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+        bossAnimator.Play("Deactivate");
+
         gameObject.transform.DOLocalMoveY(-2, 3.33f, false);
         // Destroy self once the animation has finished playing
         if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))

@@ -10,20 +10,28 @@ public class GruScript : BossScript
     [SerializeField] float rightBarrierHealth;
     public bool canBeHit = true;
     [SerializeField] float damageAccrued = 0.0f; // check if dealt enough damage to go into exposed state during attack
+    [SerializeField] int timesAttacked = 0;
+    [SerializeField] float hpLastTick;
 
+    [SerializeField] bool erupting = false;
 
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
-        leftBarrierHealth = 0.25f * maxHealth;
-        rightBarrierHealth = 0.25f * maxHealth;
+        leftBarrierHealth = 0.01f * maxHealth;
+        rightBarrierHealth = 0.01f * maxHealth;
+        hpLastTick = maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        base.Update();
+        if (!erupting)
+        {
+            base.Update();
+        }
+        CheckErupt();
     }
 
     protected override void Attack()
@@ -34,26 +42,32 @@ public class GruScript : BossScript
         PlayerLaneState attackThisLane = (PlayerLaneState)Random.Range(0, 3);
 
         // if not already attacking
-        if (!(bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
-                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
-                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")))
+        if (timesAttacked == 0)
         {
-            // play animation
-            switch (attackThisLane)
-            {
-                case PlayerLaneState.Left:
-                    bossAnimator.Play("Left Slam");
-                    break;
-                case PlayerLaneState.Middle:
-                    bossAnimator.Play("Middle Slam");
-                    break;
-                case PlayerLaneState.Right:
-                    bossAnimator.Play("Right Slam");
-                    break;
+        //    if (/*!(bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
+        //        bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
+        //        bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")) &&*/
+        //bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        //    {
+                // play animation
+                switch (attackThisLane)
+                {
+                    case PlayerLaneState.Left:
+                        bossAnimator.Play("Left Slam");
+                        break;
+                    case PlayerLaneState.Middle:
+                        bossAnimator.Play("Middle Slam");
+                        break;
+                    case PlayerLaneState.Right:
+                        bossAnimator.Play("Right Slam");
+                        break;
 
-                default: break;
-            }
+                    default: break;
+                }
+            //}
+            timesAttacked++;
         }
+
 
         // play sound
 
@@ -63,7 +77,10 @@ public class GruScript : BossScript
         if (damageAccrued >= threshold)
         {
             stance = Stances.Down;
+            damageAccrued = 0.0f;
             bossAnimator.SetInteger("State", (int)AnimStates.Opening);
+            bossAnimator.Play("Exposed Idle");
+            timesAttacked = 0;
         }
 
 
@@ -77,6 +94,7 @@ public class GruScript : BossScript
             stance = Stances.Idle;
             // reset damageAccrued
             damageAccrued = 0.0f;
+            timesAttacked = 0;
             return;
         }
     }
@@ -99,6 +117,13 @@ public class GruScript : BossScript
                 // deal reduced damage
                 if (leftBarrierActive)
                 {
+                    leftBarrierHealth -= _damage * 0.25f;
+                    if (leftBarrierHealth <= 0.0f)
+                    {
+                        leftBarrierActive = false;
+                        bossAnimator.Play("Left Break");
+                        ResetToIdle();
+                    }
                     return base.dealDamage(_damage * 0.25f, _playerLane);
                 }
 
@@ -115,6 +140,13 @@ public class GruScript : BossScript
                 // deal reduced damage
                 if (rightBarrierActive)
                 {
+                    rightBarrierHealth -= _damage * 0.25f;
+                    if (rightBarrierHealth <= 0.0f)
+                    {
+                        rightBarrierActive = false;
+                        bossAnimator.Play("Right Break");
+                        ResetToIdle();
+                    }
                     return base.dealDamage(_damage * 0.25f, _playerLane);
                 }
 
@@ -132,9 +164,54 @@ public class GruScript : BossScript
         else return 0.0f;
     }
 
+    // checks if it needs to erupt by comparing the hp last frame and this frame.
+    private void CheckErupt()
+    {
+        if ((hpLastTick > 0.75f * maxHealth && currentHealth <= 0.75f * maxHealth)  || // when it drops below 75%
+            (hpLastTick > 0.5f * maxHealth && currentHealth <= 0.5f * maxHealth)  || // when it drops below 50%
+            (hpLastTick > 0.25f * maxHealth && currentHealth <= 0.25f * maxHealth)) // when it drops below 25%
+        {
+            Debug.Log("ERUPT BIG BOI");
+            Erupt();
+        }
+        //else if 
+        //{
+        //    Debug.Log("ERUPT BIG BOI");
+        //    Erupt();
+
+        //}
+        //else if (hpLastTick > 0.25f * maxHealth && currentHealth <= 0.25f * maxHealth) // when it drops below 25%
+        //{
+        //    Debug.Log("ERUPT BIG BOI");
+        //    Erupt();
+
+        //}
+
+        // check if finished erupting
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Erupt")
+                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
+        {
+            ResetToIdle();
+        }
+
+        hpLastTick = currentHealth;
+    }
+
     private void Erupt()
     {
+        //ResetToIdle();
         bossAnimator.Play("Erupt", 0);
         canBeHit = false;
+        erupting = true;
+    }
+
+    private void ResetToIdle()
+    {
+        Debug.Log("RESET TO IDLE");
+        erupting = false;
+        stance = Stances.Idle;
+        timesAttacked = 0;
+        damageAccrued = 0.0f;
+        canBeHit = true;
     }
 }
