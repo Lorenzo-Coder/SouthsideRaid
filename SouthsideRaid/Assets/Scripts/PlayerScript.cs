@@ -414,10 +414,11 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    void GetHit()
+    public void GetHit()
     {
         // lose 10 points of mana
         GainMeter(-10);
+        Debug.Log("got hit");
     }
 
     void SwitchLanes()
