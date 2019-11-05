@@ -53,6 +53,7 @@ public class LeaderboardScript : MonoBehaviour
 
             ScoreSet scoreSet = new ScoreSet();
             scoreSet.AttachedTextBox = leaderboardArray[i];
+            scoreSet.AttachedTextBox.SetActive(false);
             scoreSet.AttachedPlayer = objects[i];
 
             HighScoreSet.Add(scoreSet);
