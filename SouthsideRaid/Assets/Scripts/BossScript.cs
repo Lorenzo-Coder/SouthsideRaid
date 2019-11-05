@@ -76,7 +76,7 @@ public class BossScript : MonoBehaviour
     protected bool startingShakeHasPlayed = false;
 
     public AudioClip[] audioClips;
-    protected AudioSource audioSource;
+    protected AudioSource audioSource;                      
 
     // Start is called before the first frame update
     protected virtual void Start()
