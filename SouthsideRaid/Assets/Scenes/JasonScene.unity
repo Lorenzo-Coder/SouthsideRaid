@@ -708,6 +708,21 @@ PrefabInstance:
       propertyPath: audioClips.Array.data[6]
       value: 
       objectReference: {fileID: 8300000, guid: b42debddae2075e4b85334780f95bee8, type: 3}
+    - target: {fileID: 5456794988494658471, guid: 134f88a2f47477d439bb46791b1d6282,
+        type: 3}
+      propertyPath: timesToAttack
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565710115777301713, guid: 134f88a2f47477d439bb46791b1d6282,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888666923995393670, guid: 134f88a2f47477d439bb46791b1d6282,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5485392960684211081, guid: 134f88a2f47477d439bb46791b1d6282, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 134f88a2f47477d439bb46791b1d6282, type: 3}

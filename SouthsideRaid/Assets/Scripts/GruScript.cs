@@ -12,7 +12,7 @@ public class GruScript : BossScript
     [SerializeField] float damageAccrued = 0.0f; // check if dealt enough damage to go into exposed state during attack
     [SerializeField] int timesAttacked = 0;
     [SerializeField] float hpLastTick;
-
+    [SerializeField] int timesToAttack = 3;
     [SerializeField] bool erupting = false;
 
     // Start is called before the first frame update
@@ -42,13 +42,15 @@ public class GruScript : BossScript
         PlayerLaneState attackThisLane = (PlayerLaneState)Random.Range(0, 3);
 
         // if not already attacking
-        if (timesAttacked == 0)
+        if (timesAttacked < timesToAttack)
         {
-        //    if (/*!(bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
-        //        bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
-        //        bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")) &&*/
-        //bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        //    {
+            if (/*!(bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
+                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
+                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")) &&*/
+                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
+                bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f &&
+                !bossAnimator.IsInTransition(0))
+            {
                 // play animation
                 switch (attackThisLane)
                 {
@@ -64,40 +66,45 @@ public class GruScript : BossScript
 
                     default: break;
                 }
-            //}
-            timesAttacked++;
+                //}
+                timesAttacked++;
+            }
         }
 
 
-        // play sound
+            // play sound
 
-        // instantiate attack prefab
+            // instantiate attack prefab
 
-        // check dmg threshold to go to exposed/down state
-        if (damageAccrued >= threshold)
-        {
-            stance = Stances.Down;
-            damageAccrued = 0.0f;
-            bossAnimator.SetInteger("State", (int)AnimStates.Opening);
-            bossAnimator.Play("Exposed Idle");
-            timesAttacked = 0;
-        }
+            // check dmg threshold to go to exposed/down state
+            if (damageAccrued >= threshold)
+            {
+                stance = Stances.Down;
+                damageAccrued = 0.0f;
+                bossAnimator.SetInteger("State", (int)AnimStates.Opening);
+                bossAnimator.Play("Exposed Idle");
+                timesAttacked = 0;
+                //timesToAttack = Random.Range(1, 4);
+            }
 
 
-        // return to idle when attack ends
-        if ((   bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") || 
-                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") || 
-                bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")) 
-                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99 && !bossAnimator.IsInTransition(0))
-        {
-            bossAnimator.SetInteger("State", (int)AnimStates.Idle);
-            stance = Stances.Idle;
-            // reset damageAccrued
-            damageAccrued = 0.0f;
-            timesAttacked = 0;
-            return;
-        }
+            // return to idle when attack ends
+            if ((bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
+                    bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
+                    bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam"))
+                    && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f && !bossAnimator.IsInTransition(0)
+                    && timesAttacked == timesToAttack)
+            {
+            //bossAnimator.SetInteger("State", (int)AnimStates.Idle);
+            //stance = Stances.Idle;
+            //// reset damageAccrued
+            //damageAccrued = 0.0f;
+            //timesAttacked = 0;
+            ResetToIdle();
+                return;
+            }
     }
+    
 
     public override float dealDamage(float _damage, PlayerLaneState _playerLane)
     {
@@ -189,7 +196,7 @@ public class GruScript : BossScript
 
         // check if finished erupting
         if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Erupt")
-                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
+                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
         {
             ResetToIdle();
         }
@@ -208,9 +215,12 @@ public class GruScript : BossScript
     private void ResetToIdle()
     {
         Debug.Log("RESET TO IDLE");
+        bossAnimator.SetInteger("State", (int)AnimStates.Idle);
         erupting = false;
         stance = Stances.Idle;
         timesAttacked = 0;
+        // times to attack
+        //timesToAttack = Random.Range(1, 4); // 1-3 times
         damageAccrued = 0.0f;
         canBeHit = true;
     }
