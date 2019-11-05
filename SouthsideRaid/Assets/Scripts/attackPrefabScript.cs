@@ -5,14 +5,17 @@ using UnityEngine;
 public class attackPrefabScript : MonoBehaviour
 {
     public float timeToDamage = 0.5f;
-    public float blinkRate  = 1.0f;
+    public float blinkRate = 1.0f;
     public int howManyBlink = 10;
+    public PlayerLaneState atkLane;
 
     private GameObject boss;
     private SpriteRenderer spriteRenderer;
     private Color defaultColor;
     private bool visible = true;
     private bool countdownEnded = false;
+
+    private GameObject[] players;
 
     // Start is called before the first frame update
     void Start()
@@ -21,33 +24,38 @@ public class attackPrefabScript : MonoBehaviour
         defaultColor = spriteRenderer.color;
 
         boss = GameObject.FindGameObjectWithTag("Boss");
-        //StartCoroutine(blink());
+        players = GameObject.FindGameObjectsWithTag("Player");
+        StartCoroutine(blink());
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (countdownEnded == false)
-        //{
+        if (countdownEnded == false)
+        {
             timeToDamage -= Time.deltaTime;
             Debug.Log(timeToDamage);
             if (timeToDamage <= 0.0f)
             {
                 countdownEnded = true;
+                attack();
             }
-        //}
+        }
     }
 
-    private void OnTriggerStay(Collider other)
+    void attack()
     {
-        Debug.Log("help me im crying");
-        if ((other.tag == "Player") && (countdownEnded == true))
+        for (int i = 0; i < 4; i++)
         {
-            Debug.Log("player in trigger, countrdown ended");
-            if (other.GetComponent<PlayerScript>().invincible == false)
+            //Debug.Log(i);
+            if (players[i].GetComponent<PlayerScript>().playersLane == atkLane && players[i].GetComponent<PlayerScript>().invincible == false)
             {
-                other.GetComponent<PlayerScript>().GetHit();
-                Debug.Log("called player getHit");
+                Debug.Log("attacked player");
+                players[i].GetComponent<PlayerScript>().GetHit();
+            }
+            else
+            {
+                Debug.Log("missed");
             }
         }
     }
@@ -56,16 +64,6 @@ public class attackPrefabScript : MonoBehaviour
     {
         for (int i = 0; i < howManyBlink * 2; i++)
         {
-            //objectRenderer.enabled = false;
-            //objectRenderer.enabled = true;
-            //if (gameObject.activeSelf)
-            //{
-            //    gameObject.SetActive(false);
-            //}
-            //else
-            //{
-            //    gameObject.SetActive(true);
-            //}
             if(visible)
             {
                 spriteRenderer.color = new Color (defaultColor.r, defaultColor.g, defaultColor.b, 0);
