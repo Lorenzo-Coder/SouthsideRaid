@@ -48,7 +48,7 @@ public class GruScript : BossScript
                 bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
                 bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam")) &&*/
                 bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
-                bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f &&
+                bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f &&
                 !bossAnimator.IsInTransition(0))
             {
                 // play animation
@@ -92,7 +92,7 @@ public class GruScript : BossScript
             if ((bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Left Slam") ||
                     bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Middle Slam") ||
                     bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Right Slam"))
-                    && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f && !bossAnimator.IsInTransition(0)
+                    && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f && !bossAnimator.IsInTransition(0)
                     && timesAttacked == timesToAttack)
             {
             //bossAnimator.SetInteger("State", (int)AnimStates.Idle);
@@ -196,7 +196,7 @@ public class GruScript : BossScript
 
         // check if finished erupting
         if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Erupt")
-                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
         {
             ResetToIdle();
         }
