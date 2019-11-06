@@ -13,8 +13,9 @@ public class attackPrefabScript : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color defaultColor;
     private bool visible = true;
-    private bool countdownEnded = false;
-
+    private bool countdownEnded = false;
+    private bool complete = false;
+
     private GameObject[] players;
 
     // Start is called before the first frame update
@@ -40,6 +41,11 @@ public class attackPrefabScript : MonoBehaviour
                 countdownEnded = true;
                 attack();
             }
+        }
+        
+        if (complete == true)
+        {
+            StartCoroutine(waitToDestroy());
         }
     }
 
@@ -79,5 +85,11 @@ public class attackPrefabScript : MonoBehaviour
             yield return new WaitForSeconds(blinkRate);
         }
         spriteRenderer.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0);
+    }
+
+    IEnumerator waitToDestroy()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Destroy(gameObject);
     }
 }
