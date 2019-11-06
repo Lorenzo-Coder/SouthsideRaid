@@ -14,6 +14,7 @@ public class attackPrefabScript : MonoBehaviour
     private Color defaultColor;
     private bool visible = true;
     private bool countdownEnded = false;
+    private bool complete = false;
 
     private GameObject[] players;
 
@@ -41,6 +42,11 @@ public class attackPrefabScript : MonoBehaviour
                 attack();
             }
         }
+        
+        if (complete == true)
+        {
+            StartCoroutine(waitToDestroy());
+        }
     }
 
     void attack()
@@ -58,6 +64,7 @@ public class attackPrefabScript : MonoBehaviour
                 Debug.Log("missed");
             }
         }
+        complete = true;
     }
 
     IEnumerator blink()
@@ -79,5 +86,11 @@ public class attackPrefabScript : MonoBehaviour
             yield return new WaitForSeconds(blinkRate);
         }
         spriteRenderer.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0);
+    }
+
+    IEnumerator waitToDestroy()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Destroy(gameObject);
     }
 }
