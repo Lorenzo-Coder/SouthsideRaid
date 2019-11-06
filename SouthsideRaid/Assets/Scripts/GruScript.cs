@@ -8,7 +8,6 @@ public class GruScript : BossScript
     bool rightBarrierActive = true;
     [SerializeField] float leftBarrierHealth = 0.0f;
     [SerializeField] float rightBarrierHealth = 0.0f;
-    public bool canBeHit = true;
     [SerializeField] float damageAccrued = 0.0f; // check if dealt enough damage to go into exposed state during attack
     [SerializeField] int timesAttacked = 0;
     [SerializeField] float hpLastTick = 0.0f;
@@ -28,6 +27,7 @@ public class GruScript : BossScript
         leftBarrierHealth = 0.01f * maxHealth;
         rightBarrierHealth = 0.01f * maxHealth;
         hpLastTick = maxHealth;
+        canBeHit = false;
     }
 
     // Update is called once per frame
@@ -279,5 +279,18 @@ public class GruScript : BossScript
         Instantiate(attackLeftLane);
         Instantiate(attackMidLane);
         Instantiate(attackRightLane);
+    }
+
+    protected override void ScreenShakeOnEntry()
+    {
+        // Screen shake at the beginning of game
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Activate") && 
+            bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.85f 
+            /*&& !bossAnimator.IsInTransition(0)*/ && !startingShakeHasPlayed)
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
+            startingShakeHasPlayed = true;
+            canBeHit = true;
+        }
     }
 }

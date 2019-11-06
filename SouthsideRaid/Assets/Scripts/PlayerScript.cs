@@ -245,12 +245,17 @@ public class PlayerScript : MonoBehaviour
             //boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
             Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
 
-            PopUp(boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane));
+            float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
+
+            PopUp(damageDealt);
             VFX.GetComponent<VFXScript>().SpawnCritFX();
 
             audioSource.PlayOneShot(audioClips[1]);
 
-            playerScore = playerScore + damageAmount + damageMultiplier;
+
+            //playerScore = playerScore + damageAmount + damageMultiplier;
+            playerScore = playerScore + (int)damageDealt;
+
             damageMultiplier = damageMultiplier * 2;
 
             // increase superMeter by 10
@@ -264,12 +269,16 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-            PopUp(boss.GetComponent<BossScript>().dealDamage(damageAmount, playersLane));
+            float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount, playersLane);
+
+            PopUp(damageDealt);
             VFX.GetComponent<VFXScript>().SpawnPunchFX();
 
             audioSource.PlayOneShot(audioClips[0]);
 
-            playerScore = playerScore + damageAmount;
+            //playerScore = playerScore + damageAmount;
+            playerScore = playerScore + (int)damageDealt;
+
             damageMultiplier = damageMultiplierAmount;
             GainMeter();
 
@@ -386,12 +395,16 @@ public class PlayerScript : MonoBehaviour
         timeCharged = Mathf.Clamp(timeCharged, 1.0f, 3.0f);
         float superDamage = BossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f;
 
+        superDamage = BossScript.dealDamage(superDamage, playersLane);
 
         // deal up to 25% of the bosses maximum hp as damage depending on how long the player charged for
         //bossScript.dealDamage(bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f);
 
         //StartCoroutine(DamageDelay(0.75f, superDamage));
-        PopUp(BossScript.dealDamage(superDamage, playersLane));
+        PopUp(superDamage);
+
+        // add to score
+        playerScore += (int)superDamage;
 
         // deplete the superMeter
         superMeter = 0;
@@ -416,9 +429,13 @@ public class PlayerScript : MonoBehaviour
 
     public void GetHit()
     {
-        // lose 10 points of mana
-        GainMeter(-10);
-        Debug.Log("got hit");
+        if (joined)
+        {
+            // lose points of mana
+            GainMeter(-10);
+            Debug.Log("got hit");
+            audioSource.PlayOneShot(audioClips[2]);
+        }
     }
 
     void SwitchLanes()

@@ -66,6 +66,8 @@ public class BossScript : MonoBehaviour
     public GameObject attackMidLane;
     public GameObject attackRightLane;
 
+    public bool canBeHit = false;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -119,6 +121,7 @@ public class BossScript : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
             startingShakeHasPlayed = true;
+            canBeHit = true;
         }
     }
 
@@ -203,7 +206,7 @@ public class BossScript : MonoBehaviour
     public virtual float dealDamage(float _damage, PlayerLaneState _playerLane)
     {
 
-        if (currentHealth > 0)
+        if (currentHealth > 0 && canBeHit)
         {
             currentHealth -= _damage;
             hpScript.RemoveChunk(_damage);
