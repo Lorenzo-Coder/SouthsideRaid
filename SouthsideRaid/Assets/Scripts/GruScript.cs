@@ -19,6 +19,9 @@ public class GruScript : BossScript
 
     float attackAnimationTimer = 0.0f;
 
+    public GameObject leftShield;
+    public GameObject rightShield;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -171,7 +174,9 @@ public class GruScript : BossScript
                     if (leftBarrierHealth <= 0.0f)
                     {
                         leftBarrierActive = false;
+                        // TODO: AUDIOVISUAL FEEDBACK
                         bossAnimator.Play("Left Break");
+                        leftShield.SetActive(false);
                         ResetToIdle();
                     }
                     return base.dealDamage(_damage * 0.25f, _playerLane);
@@ -194,7 +199,9 @@ public class GruScript : BossScript
                     if (rightBarrierHealth <= 0.0f)
                     {
                         rightBarrierActive = false;
+                        // TODO: AUDIOVISUAL FEEDBACK
                         bossAnimator.Play("Right Break");
+                        rightShield.SetActive(false);
                         ResetToIdle();
                     }
                     return base.dealDamage(_damage * 0.25f, _playerLane);
