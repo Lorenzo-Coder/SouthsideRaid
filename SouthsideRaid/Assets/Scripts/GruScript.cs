@@ -70,7 +70,7 @@ public class GruScript : BossScript
                 {
                     case PlayerLaneState.Left:
                         Debug.Log("Attack LEFT");
-                        bossAnimator.StopPlayback();
+                        //bossAnimator.StopPlayback();
                         bossAnimator.Play("Left Slam");
                         timesAttacked++;
                         attackAnimationTimer = 0.0f;
@@ -78,7 +78,7 @@ public class GruScript : BossScript
                         break;
                     case PlayerLaneState.Middle:
                         Debug.Log("Attack MIDDLE");
-                        bossAnimator.StopPlayback();
+                        //bossAnimator.StopPlayback();
 
                         bossAnimator.Play("Middle Slam");
                         timesAttacked++;
@@ -89,7 +89,7 @@ public class GruScript : BossScript
                     case PlayerLaneState.Right:
 
                         Debug.Log("Attack RIGHT");
-                        bossAnimator.StopPlayback();
+                        //bossAnimator.StopPlayback();
 
                         bossAnimator.Play("Right Slam");
                         timesAttacked++;
