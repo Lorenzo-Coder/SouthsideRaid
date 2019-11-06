@@ -34,7 +34,7 @@ public class attackPrefabScript : MonoBehaviour
         if (countdownEnded == false)
         {
             timeToDamage -= Time.deltaTime;
-            Debug.Log(timeToDamage);
+            //Debug.Log(timeToDamage);
             if (timeToDamage <= 0.0f)
             {
                 countdownEnded = true;
@@ -45,7 +45,7 @@ public class attackPrefabScript : MonoBehaviour
 
     void attack()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             //Debug.Log(i);
             if (players[i].GetComponent<PlayerScript>().playersLane == atkLane && players[i].GetComponent<PlayerScript>().invincible == false)
@@ -67,13 +67,13 @@ public class attackPrefabScript : MonoBehaviour
             if(visible)
             {
                 spriteRenderer.color = new Color (defaultColor.r, defaultColor.g, defaultColor.b, 0);
-                Debug.Log("off");
+                //Debug.Log("off");
                 visible = false;
             }
             else
             {
                 spriteRenderer.color = defaultColor;
-                Debug.Log("on");
+                //Debug.Log("on");
                 visible = true;
             }
             yield return new WaitForSeconds(blinkRate);

@@ -654,7 +654,7 @@ MonoBehaviour:
   fill: {fileID: 1617929636951302655}
   stance: 0
   hpScript: {fileID: 1617929637590690764}
-  idleDuration: 5
+  idleDuration: 3
   attackDuration: 2
   downDuration: 5
   TimeClick: {fileID: 8840779545620813560, guid: 896e119b41e39c74e82c9713de03fdbf,
@@ -672,6 +672,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c991e058409139e4684e9b7e5e26d390, type: 3}
   - {fileID: 8300000, guid: 31b87806e9892254ab6bc62f0d1cba70, type: 3}
   - {fileID: 8300000, guid: b42debddae2075e4b85334780f95bee8, type: 3}
+  attackLeftLane: {fileID: 6392709983377668174, guid: d350ee7422433ad419d771beff8e3b9a,
+    type: 3}
+  attackMidLane: {fileID: 6392709983377668174, guid: 06fff6ec88b9e1a4e90239939ce23e78,
+    type: 3}
+  attackRightLane: {fileID: 6392709983377668174, guid: 1bcc01d7b768c8144a689496d217c579,
+    type: 3}
   leftBarrierHealth: 0
   rightBarrierHealth: 0
   canBeHit: 1
@@ -680,6 +686,8 @@ MonoBehaviour:
   hpLastTick: 0
   timesToAttack: 3
   erupting: 0
+  lastLaneAttacked: 1
+  attackThisLane: 1
 --- !u!1 &6036322911375817199
 GameObject:
   m_ObjectHideFlags: 0

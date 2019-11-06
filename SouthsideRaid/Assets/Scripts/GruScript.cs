@@ -74,6 +74,7 @@ public class GruScript : BossScript
                         bossAnimator.Play("Left Slam");
                         timesAttacked++;
                         attackAnimationTimer = 0.0f;
+                        Instantiate(attackLeftLane);
                         break;
                     case PlayerLaneState.Middle:
                         Debug.Log("Attack MIDDLE");
@@ -82,6 +83,8 @@ public class GruScript : BossScript
                         bossAnimator.Play("Middle Slam");
                         timesAttacked++;
                         attackAnimationTimer = 0.0f;
+                        Instantiate(attackMidLane);
+
                         break;
                     case PlayerLaneState.Right:
 
@@ -91,6 +94,8 @@ public class GruScript : BossScript
                         bossAnimator.Play("Right Slam");
                         timesAttacked++;
                         attackAnimationTimer = 0.0f;
+                        Instantiate(attackRightLane);
+
                         break;
 
                     default: break;
@@ -249,11 +254,12 @@ public class GruScript : BossScript
         bossAnimator.Play("Erupt", 0);
         canBeHit = false;
         erupting = true;
+        StartCoroutine("EruptAttack");
     }
 
     private void ResetToIdle()
     {
-        Debug.Log("RESET TO IDLE");
+        //Debug.Log("RESET TO IDLE");
         isCritical = false;
         bossAnimator.SetInteger("State", (int)AnimStates.Idle);
         erupting = false;
@@ -264,5 +270,14 @@ public class GruScript : BossScript
         damageAccrued = 0.0f;
         canBeHit = true;
         attackAnimationTimer = 0.0f;
+        idleTimer = idleDuration;
+    }
+
+    IEnumerator EruptAttack()
+    {
+        yield return new WaitForSeconds(2.0f);
+        Instantiate(attackLeftLane);
+        Instantiate(attackMidLane);
+        Instantiate(attackRightLane);
     }
 }

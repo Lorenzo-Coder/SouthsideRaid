@@ -60,7 +60,11 @@ public class BossScript : MonoBehaviour
     protected bool startingShakeHasPlayed = false;
 
     public AudioClip[] audioClips;
-    protected AudioSource audioSource;                      
+    protected AudioSource audioSource;
+
+    public GameObject attackLeftLane;
+    public GameObject attackMidLane;
+    public GameObject attackRightLane;
 
     // Start is called before the first frame update
     protected virtual void Start()
