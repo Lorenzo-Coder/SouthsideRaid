@@ -37,7 +37,7 @@ public class BossScript : MonoBehaviour
     public Image fill;
     public Stances stance = Stances.Idle;
     public HPBarScript hpScript;
-    public void dealDamage(float _damage)
+    public virtual void dealDamage(float _damage)
     {
         
         if (currentHealth > 0)
@@ -61,23 +61,25 @@ public class BossScript : MonoBehaviour
 
     public GameObject TimeClick;
 
-    private float idleTimer;
-    private float attackTimer;
-    private float downTimer;
+    protected float idleTimer;
+    protected float attackTimer;
+    protected float downTimer;
 
     public bool isCritical = false;
+
+    // position ranges for the crit circle
     public float maxX = 0.25f;
     public float maxY = 0.25f;
     public float minX = -0.25f;
     public float minY = -0.25f;
 
-    private bool startingShakeHasPlayed = false;
+    protected bool startingShakeHasPlayed = false;
 
     public AudioClip[] audioClips;
-    private AudioSource audioSource;
+    protected AudioSource audioSource;                      
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         //stance = Stances.Idle;
         idleTimer = idleDuration;
@@ -92,7 +94,7 @@ public class BossScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         // Screen shake at the beginning of game
         if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Activate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.75 && !bossAnimator.IsInTransition(0) && !startingShakeHasPlayed)
