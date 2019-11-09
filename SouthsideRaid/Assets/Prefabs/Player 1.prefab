@@ -127,11 +127,17 @@ MonoBehaviour:
   joined: 0
   blocking: 0
   stunned: 0
+  invincible: 0
+  canSwitchLane: 0
   timeToBlock: 20
   stunTime: 120
+  iFrameLength: 0.2
+  laneSwitchCooldown: 0.3
   damageMultiplierAmount: 25
   damageAmount: 100
   playersButton: 0
+  playersDodgeButton: 0
+  playersLane: 1
   playerName: 
   playerScore: 0
   playerAnimator: {fileID: 8956628877770625522}
@@ -143,6 +149,7 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 9bcea810dc69ea04f91220f129e613e2, type: 3}
   - {fileID: 8300000, guid: 35562ca401569a348b7030d63e099bc1, type: 3}
+  - {fileID: 8300000, guid: 7e72029367242e74697a8ae5c10dad30, type: 3}
   CurrentAnimState: 0
   superMeter: 0
   timeToCharge: 0.2

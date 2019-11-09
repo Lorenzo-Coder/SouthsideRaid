@@ -46,6 +46,6 @@ MonoBehaviour:
   currentBossMaxHealth: 0
   longArmPrefab: {fileID: 5485392960684211082, guid: 4c318b8368c07524ebe02fa9481a1ac6,
     type: 3}
-  apePrefab: {fileID: 3309203603198367803, guid: f3d465cead4a33445b742b236e58b09e,
+  apePrefab: {fileID: 5485392960684211082, guid: 134f88a2f47477d439bb46791b1d6282,
     type: 3}
   hpMultiplier: 1.5
