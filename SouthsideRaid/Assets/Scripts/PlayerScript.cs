@@ -28,6 +28,7 @@ public class PlayerScript : MonoBehaviour
     public bool blocking;
     public bool stunned;
     public bool invincible;
+    public bool charging;
     public bool canSwitchLane;
     public float timeToBlock = 20.0f;
     public float stunTime = 120.0f;
@@ -85,6 +86,7 @@ public class PlayerScript : MonoBehaviour
         invincible = false;
         foundBoss = false;
         canSwitchLane = true;
+        charging = false;
         blockTimer = timeToBlock;
         stunTimer = stunTime;
         damageMultiplier = damageMultiplierAmount;
@@ -92,6 +94,8 @@ public class PlayerScript : MonoBehaviour
         modelAnimationThing.SetActive(false);
         audioSource = gameObject.GetComponent<AudioSource>();
         initialPosition = gameObject.transform.position;
+
+        
 
         //set starting position
         //gameObject.transform.position = new Vector3(LaneNodes[1].gameObject.transform.position.x, LaneNodes[1].gameObject.transform.position.y, gameObject.transform.position.y);
@@ -148,6 +152,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (stunned == false)
             {
+                stunParticleSystem.Stop();
                 if (Input.GetKeyDown(playersButton) && joined == true)
                 {
                     if (timesAttacked >= 1)
@@ -166,12 +171,14 @@ public class PlayerScript : MonoBehaviour
             {
                 //blockTimer = timeToBlock;
                 //blocking = false;
+                charging = false;
+                chargingParticleSystem.Stop();
                 if (timeCharged >= 1.0f)
                 {
                     SuperMove();
                 }
                 timeCharged = 0.0f;
-
+               
                 animIdle();
             }
 
@@ -193,6 +200,11 @@ public class PlayerScript : MonoBehaviour
                 {
                     timeCharged += Time.deltaTime;
                     animCharge();
+                    charging = true;
+                    if (!chargingParticleSystem.isPlaying)
+                    {
+                        chargingParticleSystem.Play();
+                    }
                 }
             }
 
@@ -205,11 +217,17 @@ public class PlayerScript : MonoBehaviour
             if (stunned == true)
             {
                 stunTimer -= 1.0f;
+                if (!stunParticleSystem.isPlaying)
+                {
+                    stunParticleSystem.Play();
+                }
                 if (stunTimer <= 0.0f)
                 {
                     animIdle();
                     stunned = false;
+                    canSwitchLane = true;
                     stunTimer = stunTime;
+                    stunParticleSystem.Stop();
                 }
             }
 
@@ -407,6 +425,8 @@ public class PlayerScript : MonoBehaviour
         //StartCoroutine(DamageDelay(0.75f, superDamage));
         PopUp(superDamage);
 
+        superParticleSystem.Play();
+
         // add to score
         playerScore += (int)superDamage;
 
@@ -436,9 +456,17 @@ public class PlayerScript : MonoBehaviour
         if (joined)
         {
             // lose points of mana
-            GainMeter(-10);
+            GainMeter(-50);
             Debug.Log("got hit");
             audioSource.PlayOneShot(audioClips[2]);
+            if (charging)
+            {
+                stunned = true;
+                canSwitchLane = false;
+                charging = false;
+                timeCharged = 0.0f;
+                animHitStun();
+            }
         }
     }
 
