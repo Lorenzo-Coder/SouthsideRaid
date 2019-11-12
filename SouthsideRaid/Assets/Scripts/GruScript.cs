@@ -24,6 +24,7 @@ public class GruScript : BossScript
 
     public ParticleSystem eruptParticleSys;
     public ParticleSystem eruptAttackParticleSys;
+    public ParticleSystem slamParticleSys;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -291,8 +292,15 @@ public class GruScript : BossScript
         Instantiate(attackMidLane);
         Instantiate(attackRightLane);
         eruptAttackParticleSys.Play();
+        StartCoroutine("EruptAttackExplosion");
     }
-    
+
+    IEnumerator EruptAttackExplosion()
+    {
+        yield return new WaitForSeconds(0.4f);
+        slamParticleSys.Play();
+    }
+
     IEnumerator EruptFromHead()
     {
         yield return new WaitForSeconds(0.7f);
