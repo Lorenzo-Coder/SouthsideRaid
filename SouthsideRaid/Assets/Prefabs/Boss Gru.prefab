@@ -1188,11 +1188,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5485392960684211080}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 6c822e8c538c95d4e9f15d04450edc65,
-        type: 3}
-      propertyPath: m_Name
-      value: Gru_Animation3
-      objectReference: {fileID: 0}
     - target: {fileID: 8846898612135679065, guid: 6c822e8c538c95d4e9f15d04450edc65,
         type: 3}
       propertyPath: m_IsActive
@@ -1211,7 +1206,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 6c822e8c538c95d4e9f15d04450edc65,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 27.8
+      value: 8.32
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6c822e8c538c95d4e9f15d04450edc65,
         type: 3}
@@ -1258,6 +1253,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: c9fb0f7ca015040489b1cc1a11c631e7, type: 2}
+    - target: {fileID: -927199367670048503, guid: 6c822e8c538c95d4e9f15d04450edc65,
+        type: 3}
+      propertyPath: m_Name
+      value: Gru_Animation3
+      objectReference: {fileID: 0}
     - target: {fileID: 2013744490878062015, guid: 6c822e8c538c95d4e9f15d04450edc65,
         type: 3}
       propertyPath: m_IsActive
@@ -1267,7 +1267,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0c8b228bab090764aa5fd6ab6c525a1a, type: 2}
+      objectReference: {fileID: 2100000, guid: f335d03455efc7644bd59c6a7d0e3cfc, type: 2}
+    - target: {fileID: -8221609900653767914, guid: 6c822e8c538c95d4e9f15d04450edc65,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f335d03455efc7644bd59c6a7d0e3cfc, type: 2}
+    - target: {fileID: -2846219537754512816, guid: 6c822e8c538c95d4e9f15d04450edc65,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f335d03455efc7644bd59c6a7d0e3cfc, type: 2}
+    - target: {fileID: 1621552781290338639, guid: 6c822e8c538c95d4e9f15d04450edc65,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f335d03455efc7644bd59c6a7d0e3cfc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c822e8c538c95d4e9f15d04450edc65, type: 3}
 --- !u!4 &2939589281981772192 stripped
@@ -1301,11 +1316,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5485392960684211080}
     m_Modifications:
-    - target: {fileID: 3199891746277809193, guid: f6b731a521a9e9442ae7b2ca16e506f4,
-        type: 3}
-      propertyPath: m_Name
-      value: Erupt
-      objectReference: {fileID: 0}
     - target: {fileID: 3199891746277809194, guid: f6b731a521a9e9442ae7b2ca16e506f4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1365,6 +1375,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3199891746277809193, guid: f6b731a521a9e9442ae7b2ca16e506f4,
+        type: 3}
+      propertyPath: m_Name
+      value: Erupt
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6b731a521a9e9442ae7b2ca16e506f4, type: 3}

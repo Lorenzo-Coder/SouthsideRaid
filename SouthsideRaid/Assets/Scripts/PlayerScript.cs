@@ -231,7 +231,7 @@ public class PlayerScript : MonoBehaviour
     {
         modelAnimationThing.SetActive(true);
         joined = true;
-        transform.DOLocalMoveY(-3.86f, 0.2f, false);
+        transform.DOLocalMoveY(-3.21f, 0.2f, false);
         animSwitch();
     }
 
