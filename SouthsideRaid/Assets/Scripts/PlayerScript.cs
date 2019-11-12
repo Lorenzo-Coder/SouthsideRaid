@@ -68,6 +68,10 @@ public class PlayerScript : MonoBehaviour
     public SpriteRenderer superBG;
     public SpriteRenderer superFill;
 
+    public ParticleSystem chargingParticleSystem;
+    public ParticleSystem superParticleSystem;
+    public ParticleSystem stunParticleSystem;
+
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     //private Vector3 myMaxBoundsCenter = Vector3.zero;
     //private Vector3 myMaxBoundsSize = new Vector3(999999.0f, 999999.0f, 999999.0f);
