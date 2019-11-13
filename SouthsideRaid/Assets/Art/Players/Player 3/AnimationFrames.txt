@@ -1,0 +1,13 @@
+Animation Frames:
+
+10-20 = Attack
+20-50 = Idle
+50-60 = ChargeUpStart
+60-90 = ChargeUpIdle
+90-120 = ChargeUpAttack
+120-130 = Stun
+130-160 = StunIdle
+160-190 = StunRecover
+190-218 = Switch/Jump
+218-268 = VictoryPose
+

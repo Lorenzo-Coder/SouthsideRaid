@@ -577,6 +577,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c991e058409139e4684e9b7e5e26d390, type: 3}
   - {fileID: 8300000, guid: 31b87806e9892254ab6bc62f0d1cba70, type: 3}
   - {fileID: 8300000, guid: b42debddae2075e4b85334780f95bee8, type: 3}
+  attackLeftLane: {fileID: 6392709983377668174, guid: d350ee7422433ad419d771beff8e3b9a,
+    type: 3}
+  attackMidLane: {fileID: 6392709983377668174, guid: 06fff6ec88b9e1a4e90239939ce23e78,
+    type: 3}
+  attackRightLane: {fileID: 6392709983377668174, guid: 1bcc01d7b768c8144a689496d217c579,
+    type: 3}
+  canBeHit: 0
 --- !u!114 &7287850798305171446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,6 +809,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5485392960684211080}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 109446dd4bd00504e93746bcc2c34262,
+        type: 3}
+      propertyPath: m_Name
+      value: JohnSmith
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687921769600118249, guid: 109446dd4bd00504e93746bcc2c34262,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 109446dd4bd00504e93746bcc2c34262,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -810,12 +827,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 109446dd4bd00504e93746bcc2c34262,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -4.04
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 109446dd4bd00504e93746bcc2c34262,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20
+      value: 11.35
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 109446dd4bd00504e93746bcc2c34262,
         type: 3}
@@ -877,21 +894,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: a13ec26293c49554882f37bdb4df2938, type: 2}
-    - target: {fileID: -927199367670048503, guid: 109446dd4bd00504e93746bcc2c34262,
-        type: 3}
-      propertyPath: m_Name
-      value: JohnSmith
-      objectReference: {fileID: 0}
-    - target: {fileID: 6687921769600118249, guid: 109446dd4bd00504e93746bcc2c34262,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7889826895657389427, guid: 109446dd4bd00504e93746bcc2c34262,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: e57ca4cbec3126a468352fa1ecbad40e, type: 2}
+      objectReference: {fileID: 2100000, guid: 603155f62c21d424cbfddd6382bd7cb7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 109446dd4bd00504e93746bcc2c34262, type: 3}
 --- !u!4 &2645324094335149858 stripped

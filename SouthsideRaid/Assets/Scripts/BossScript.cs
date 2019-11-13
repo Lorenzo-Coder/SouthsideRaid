@@ -37,23 +37,7 @@ public class BossScript : MonoBehaviour
     public Image fill;
     public Stances stance = Stances.Idle;
     public HPBarScript hpScript;
-    public virtual void dealDamage(float _damage)
-    {
-        
-        if (currentHealth > 0)
-        {
-            currentHealth -= _damage;
-            hpScript.RemoveChunk(_damage);
-            // set hit animation
-            if (isCritical)
-            {
-                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
-                bossAnimator.Play("Hit");
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
-            }
-        }
-
-    }
+  
 
     public float idleDuration = 5.0f;
     public float attackDuration = 2.0f;
@@ -78,6 +62,12 @@ public class BossScript : MonoBehaviour
     public AudioClip[] audioClips;
     protected AudioSource audioSource;
 
+    public GameObject attackLeftLane;
+    public GameObject attackMidLane;
+    public GameObject attackRightLane;
+
+    public bool canBeHit = false;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -97,97 +87,139 @@ public class BossScript : MonoBehaviour
     protected virtual void Update()
     {
         // Screen shake at the beginning of game
-        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Activate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.75 && !bossAnimator.IsInTransition(0) && !startingShakeHasPlayed)
-        {
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
-            startingShakeHasPlayed = true;
-        }
+        ScreenShakeOnEntry();
 
         fill.transform.localScale = new Vector3(Mathf.Max(0.0f,(float)currentHealth / (float)maxHealth), fill.transform.localScale.y, fill.transform.localScale.z);
         if (currentHealth > 0)
-        {
-            
-
+        { 
             switch (stance)
             {
                 case Stances.Idle:
-                    bossAnimator.SetInteger("State", (int)AnimStates.Idle);
-                    idleTimer -= Time.deltaTime;
-                    if (idleTimer <= 0.0f)
-                    {
-                        stance = Stances.Attack;
-                        idleTimer = idleDuration;
-                        bossAnimator.SetInteger("State", (int)AnimStates.Attack);
-
-                    }
+                    Idle();
                     break;
                 case Stances.Attack:
-                   // Debug.Log("Attack");
-                    attackTimer -= Time.deltaTime;
-                    bossAnimator.SetInteger("State", (int)AnimStates.Attack);
-                    if (attackTimer <= 0.0f)
-                    {
-                        stance = Stances.Down;
-                        attackTimer = attackDuration;
-                        bossAnimator.SetInteger("State", (int)AnimStates.Opening);
-                    }
-                    if (!audioSource.isPlaying)
-                    {
-                        audioSource.PlayOneShot(audioClips[1]);
-                    }
+                    Attack();
                     break;
                 case Stances.Down:
-                    bossAnimator.SetInteger("State", (int)AnimStates.Opening);
-                    downTimer -= Time.deltaTime;
-                    if (downTimer <= 0.0f && (GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
-                    {
-                        bossAnimator.SetInteger("State", (int)AnimStates.Idle);
-                        stance = Stances.Idle;
-                        isCritical = false;
-                        downTimer = downDuration;
-                    }
-                    else if((GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
-                    {
-                        float posX = Random.Range(minX, maxX);
-                        float posY = Random.Range(minY, maxY);
-                        Instantiate(TimeClick, new Vector3(posX,posY,0.0f), Quaternion.identity);
-                    }
-
-                    if (GameObject.FindGameObjectWithTag("TimeClick")!= null)
-                    {
-                        isCritical = GameObject.FindGameObjectWithTag("TimeClick").GetComponent<TimeClickScript>().canHit;
-                    }
-
-                    if (!audioSource.isPlaying)
-                    {
-                        audioSource.PlayOneShot(audioClips[5]);
-                    }
-
+                    Down();
                     break;
                 default:
                     break;
             }
         }
-        else
+        else // dead
         {
-            
-            isCritical = false;
-            bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
-            gameObject.transform.DOLocalMoveY(-2, 3.33f, false);
-            // Destroy self once the animation has finished playing
-            if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate")&&bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
-            {
-                Debug.Log("Finished animation");
-                Destroy(gameObject);
-                GameObject.FindGameObjectWithTag("Leaderboard").GetComponent<LeaderboardScript>().IncBossLevel();
-            }
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(audioClips[6]);
-                audioSource.PlayOneShot(audioClips[2]);
-            }
-            //Destroy(gameObject);
+            Die();
         }
 
+    }
+
+    protected virtual void ScreenShakeOnEntry()
+    {
+        // Screen shake at the beginning of game
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Activate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.75 && !bossAnimator.IsInTransition(0) && !startingShakeHasPlayed)
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
+            startingShakeHasPlayed = true;
+            canBeHit = true;
+        }
+    }
+
+    protected virtual void Idle()
+    {
+        bossAnimator.SetInteger("State", (int)AnimStates.Idle);
+        idleTimer -= Time.deltaTime;
+        if (idleTimer <= 0.0f)
+        {
+            stance = Stances.Attack;
+            idleTimer = idleDuration;
+            bossAnimator.SetInteger("State", (int)AnimStates.Attack);
+        }
+    }
+
+    protected virtual void Attack()
+    {
+        attackTimer -= Time.deltaTime;
+        //bossAnimator.SetInteger("State", (int)AnimStates.Attack);
+        if (attackTimer <= 0.0f)
+        {
+            stance = Stances.Down;
+            attackTimer = attackDuration;
+            bossAnimator.SetInteger("State", (int)AnimStates.Opening);
+        }
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioClips[1]);
+        }
+    }
+
+    protected virtual void Down()
+    {
+        bossAnimator.SetInteger("State", (int)AnimStates.Opening);
+        downTimer -= Time.deltaTime;
+        if (downTimer <= 0.0f && (GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
+        {
+            bossAnimator.SetInteger("State", (int)AnimStates.Idle);
+            stance = Stances.Idle;
+            isCritical = false;
+            downTimer = downDuration;
+        }
+        else if ((GameObject.FindGameObjectsWithTag("TimeClick").Length == 0))
+        {
+            float posX = Random.Range(minX, maxX);
+            float posY = Random.Range(minY, maxY);
+            Instantiate(TimeClick, new Vector3(posX, posY, 0.0f), Quaternion.identity);
+        }
+
+        if (GameObject.FindGameObjectWithTag("TimeClick") != null)
+        {
+            isCritical = GameObject.FindGameObjectWithTag("TimeClick").GetComponent<TimeClickScript>().canHit;
+        }
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioClips[5]);
+        }
+    }
+
+    protected virtual void Die()
+    {
+        isCritical = false;
+        //bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+        bossAnimator.Play("Deactivate");
+
+        gameObject.transform.DOLocalMoveY(-2, 3.33f, false);
+        // Destroy self once the animation has finished playing
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
+        {
+            Debug.Log("Finished animation");
+            Destroy(gameObject);
+            GameObject.FindGameObjectWithTag("Leaderboard").GetComponent<LeaderboardScript>().IncBossLevel();
+        }
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioClips[6]);
+            audioSource.PlayOneShot(audioClips[2]);
+        }
+    }
+
+    public virtual float dealDamage(float _damage, PlayerLaneState _playerLane)
+    {
+
+        if (currentHealth > 0 && canBeHit)
+        {
+            currentHealth -= _damage;
+            hpScript.RemoveChunk(_damage);
+            // set hit animation
+            if (isCritical)
+            {
+                //bossAnimator.SetInteger("State", (int)AnimStates.Hit);
+                bossAnimator.Play("Hit");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
+            }
+            return _damage;
+        }
+
+        return 0.0f;
     }
 }
