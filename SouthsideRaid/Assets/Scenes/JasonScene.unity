@@ -15,14 +15,14 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 0.6509434, g: 0.2720693, b: 0.027634379, a: 1}
+  m_FogColor: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.01
-  m_LinearFogStart: 17.7
-  m_LinearFogEnd: 81.4
-  m_AmbientSkyColor: {r: 1, g: 0.50591254, b: 0, a: 1}
-  m_AmbientEquatorColor: {r: 0.8301887, g: 0.6038379, b: 0.41901034, a: 1}
-  m_AmbientGroundColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 100
+  m_AmbientSkyColor: {r: 0.8307701, g: 0.37626222, b: 0.18447503, a: 1}
+  m_AmbientEquatorColor: {r: 0.8148468, g: 0.637597, b: 0.5332766, a: 1}
+  m_AmbientGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
@@ -2135,8 +2135,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 0.9528302, g: 0.7591034, b: 0.63372195, a: 1}
-  m_Intensity: 1.14
+  m_Color: {r: 1, g: 0.69411767, b: 0.48627454, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3666,6 +3666,11 @@ PrefabInstance:
         type: 3}
       propertyPath: laneSwitchCooldown
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795792699042895913, guid: ebbbea0b1755f0b4f85ccc0d7f3a7f14,
+        type: 3}
+      propertyPath: playerName
+      value: Zee
       objectReference: {fileID: 0}
     - target: {fileID: 8548789383322489795, guid: ebbbea0b1755f0b4f85ccc0d7f3a7f14,
         type: 3}
