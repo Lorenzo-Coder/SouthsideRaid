@@ -20,6 +20,7 @@ public class ScoreSet
 public class LeaderboardScript : MonoBehaviour
 {
     public GameObject[] leaderboardArray;
+    public GameObject[] numbersArray;
 
     private Vector3[] originalPos;
     private Vector3[] originalScale;
@@ -70,6 +71,13 @@ public class LeaderboardScript : MonoBehaviour
 
         if (GameObject.FindGameObjectsWithTag("Player") != null) // cherck if there are players in the scene
         {
+            for (int i = 0; i < HighScoreSet.Count; i++)
+            {
+                HighScoreSet[i].UpdateText();
+            }
+
+            List<ScoreSet> joinedList = new List<ScoreSet>();
+
             // check if any of them have joined
             int joined = 0;
             for (int i = 0; i < HighScoreSet.Count; i++)
@@ -77,24 +85,28 @@ public class LeaderboardScript : MonoBehaviour
                 if (HighScoreSet[i].AttachedPlayer.GetComponent<PlayerScript>().joined)
                 {
                     HighScoreSet[i].AttachedTextBox.SetActive(true);
+                    joinedList.Add(HighScoreSet[i]);
                     joined++;
                 }
             }
 
-            for (int i = 0; i < HighScoreSet.Count; i++)
+            for (int i = 0; i < joined; i++)
             {
-                HighScoreSet[i].UpdateText();
+                if (i <= 4)
+                {
+                    numbersArray[i].SetActive(true);
+                }
             }
 
             // sort through all the players to find players with the highest score
-            HighScoreSet.Sort(delegate (ScoreSet a, ScoreSet b)
+            joinedList.Sort(delegate (ScoreSet a, ScoreSet b)
             {
                 return (b.ScoreEasyAccess.CompareTo(a.ScoreEasyAccess));
             });
 
-            for (int i = 0; i < HighScoreSet.Count; i++)
+            for (int i = 0; i < joinedList.Count; i++)
             {
-                HighScoreSet[i].AttachedTextBox.transform.DOLocalMove(originalPos[i], 0.2f);
+                joinedList[i].AttachedTextBox.transform.DOLocalMove(originalPos[i], 0.2f);
             }
         }
 

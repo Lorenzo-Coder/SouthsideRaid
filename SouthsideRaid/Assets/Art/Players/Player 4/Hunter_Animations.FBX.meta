@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 40f68bd00ad901b4081d3322bb66f538
+guid: 20f1b36b7582b0b48b47df5d216bb4c2
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable:
@@ -10,23 +10,23 @@ ModelImporter:
       74: -3100369314251171874
     second: Idle
   - first:
-      74: 9194127723438214557
-    second: ChargeStart
+      74: -4444945444933244115
+    second: ChargeUpStart
   - first:
-      74: 1309728789637526152
-    second: Charging
+      74: 5931271307279647512
+    second: ChargeUpIdle
   - first:
-      74: 6524788623499313087
-    second: ChargeAttack
+      74: -8074180586009418728
+    second: ChargeUpAttack
   - first:
-      74: 4705975476797189413
-    second: StunStart
+      74: 7666019288946695810
+    second: Stun
   - first:
-      74: -2861340925227477554
-    second: Stunned
+      74: -1966343888348000782
+    second: StunIdle
   - first:
-      74: -357181853364132676
-    second: StunEnd
+      74: -7270118616129959118
+    second: StunRecover
   - first:
       74: 909836601693898461
     second: Switch
@@ -120,9 +120,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ChargeStart
+      name: ChargeUpStart
       takeName: Take 001
-      internalID: 9194127723438214557
+      internalID: -4444945444933244115
       firstFrame: 50
       lastFrame: 60
       wrapMode: 0
@@ -149,9 +149,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Charging
+      name: ChargeUpIdle
       takeName: Take 001
-      internalID: 1309728789637526152
+      internalID: 5931271307279647512
       firstFrame: 60
       lastFrame: 90
       wrapMode: 0
@@ -178,9 +178,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ChargeAttack
+      name: ChargeUpAttack
       takeName: Take 001
-      internalID: 6524788623499313087
+      internalID: -8074180586009418728
       firstFrame: 90
       lastFrame: 120
       wrapMode: 0
@@ -207,9 +207,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: StunStart
+      name: Stun
       takeName: Take 001
-      internalID: 4705975476797189413
+      internalID: 7666019288946695810
       firstFrame: 120
       lastFrame: 130
       wrapMode: 0
@@ -236,9 +236,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Stunned
+      name: StunIdle
       takeName: Take 001
-      internalID: -2861340925227477554
+      internalID: -1966343888348000782
       firstFrame: 130
       lastFrame: 160
       wrapMode: 0
@@ -265,9 +265,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: StunEnd
+      name: StunRecover
       takeName: Take 001
-      internalID: -357181853364132676
+      internalID: -7270118616129959118
       firstFrame: 160
       lastFrame: 190
       wrapMode: 0
