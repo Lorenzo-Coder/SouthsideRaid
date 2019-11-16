@@ -25,9 +25,11 @@ public enum PlayerLaneState
 public class PlayerScript : MonoBehaviour
 {
     public bool joined;
+    public float StartYLevel = -3.21f;
     public bool blocking;
     public bool stunned;
     public bool invincible;
+    public bool charging;
     public bool canSwitchLane;
     public float timeToBlock = 20.0f;
     public float stunTime = 120.0f;
@@ -68,6 +70,10 @@ public class PlayerScript : MonoBehaviour
     public SpriteRenderer superBG;
     public SpriteRenderer superFill;
 
+    public ParticleSystem chargingParticleSystem;
+    public ParticleSystem superParticleSystem;
+    public ParticleSystem stunParticleSystem;
+
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     //private Vector3 myMaxBoundsCenter = Vector3.zero;
     //private Vector3 myMaxBoundsSize = new Vector3(999999.0f, 999999.0f, 999999.0f);
@@ -81,6 +87,7 @@ public class PlayerScript : MonoBehaviour
         invincible = false;
         foundBoss = false;
         canSwitchLane = true;
+        charging = false;
         blockTimer = timeToBlock;
         stunTimer = stunTime;
         damageMultiplier = damageMultiplierAmount;
@@ -88,6 +95,8 @@ public class PlayerScript : MonoBehaviour
         modelAnimationThing.SetActive(false);
         audioSource = gameObject.GetComponent<AudioSource>();
         initialPosition = gameObject.transform.position;
+
+        
 
         //set starting position
         //gameObject.transform.position = new Vector3(LaneNodes[1].gameObject.transform.position.x, LaneNodes[1].gameObject.transform.position.y, gameObject.transform.position.y);
@@ -144,6 +153,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (stunned == false)
             {
+                stunParticleSystem.Stop();
                 if (Input.GetKeyDown(playersButton) && joined == true)
                 {
                     if (timesAttacked >= 1)
@@ -162,12 +172,14 @@ public class PlayerScript : MonoBehaviour
             {
                 //blockTimer = timeToBlock;
                 //blocking = false;
+                charging = false;
+                chargingParticleSystem.Stop();
                 if (timeCharged >= 1.0f)
                 {
                     SuperMove();
                 }
                 timeCharged = 0.0f;
-
+               
                 animIdle();
             }
 
@@ -189,23 +201,34 @@ public class PlayerScript : MonoBehaviour
                 {
                     timeCharged += Time.deltaTime;
                     animCharge();
+                    charging = true;
+                    if (!chargingParticleSystem.isPlaying)
+                    {
+                        chargingParticleSystem.Play();
+                    }
                 }
             }
 
-            if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false) && (invincible == false))
-            {
-                animHitStun();
-                stunned = true;
-            }
+            //if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false) && (invincible == false))
+            //{
+            //    animHitStun();
+            //    stunned = true;
+            //}
 
             if (stunned == true)
             {
                 stunTimer -= 1.0f;
+                if (!stunParticleSystem.isPlaying)
+                {
+                    stunParticleSystem.Play();
+                }
                 if (stunTimer <= 0.0f)
                 {
                     animIdle();
                     stunned = false;
+                    canSwitchLane = true;
                     stunTimer = stunTime;
+                    stunParticleSystem.Stop();
                 }
             }
 
@@ -231,7 +254,7 @@ public class PlayerScript : MonoBehaviour
     {
         modelAnimationThing.SetActive(true);
         joined = true;
-        transform.DOLocalMoveY(-3.86f, 0.2f, false);
+        transform.DOLocalMoveY(StartYLevel, 0.2f, false);
         animSwitch();
     }
 
@@ -242,15 +265,20 @@ public class PlayerScript : MonoBehaviour
 
         if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
         {
-            boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier);
+            //boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
             Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
 
-            PopUp(true);
+            float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
+
+            PopUp(damageDealt);
             VFX.GetComponent<VFXScript>().SpawnCritFX();
 
             audioSource.PlayOneShot(audioClips[1]);
 
-            playerScore = playerScore + damageAmount + damageMultiplier;
+
+            //playerScore = playerScore + damageAmount + damageMultiplier;
+            playerScore = playerScore + (int)damageDealt;
+
             damageMultiplier = damageMultiplier * 2;
 
             // increase superMeter by 10
@@ -264,14 +292,16 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-            boss.GetComponent<BossScript>().dealDamage(damageAmount);
+            float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount, playersLane);
 
-            PopUp(false);
+            PopUp(damageDealt);
             VFX.GetComponent<VFXScript>().SpawnPunchFX();
 
             audioSource.PlayOneShot(audioClips[0]);
 
-            playerScore = playerScore + damageAmount;
+            //playerScore = playerScore + damageAmount;
+            playerScore = playerScore + (int)damageDealt;
+
             damageMultiplier = damageMultiplierAmount;
             GainMeter();
 
@@ -285,26 +315,26 @@ public class PlayerScript : MonoBehaviour
         blocking = true;
     }
 
-    void PopUp(bool withM)
+    void PopUp(float _damage)
     {
-        if (withM == false)
-        {
+        //if (withM == false)
+        //{
             GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
             popUpObject.transform.SetParent(canvas.transform, false);
             float xPopUpPos = Random.Range(-85.0f, 85.0f);
             popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
-            popUpObject.GetComponent<DPSScript>().DPS(damageAmount);
+            popUpObject.GetComponent<DPSScript>().DPS((int)_damage);
             StartCoroutine(animateDPS(popUpObject));
-        }
-        else
-        {
-            GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
-            popUpObject.transform.SetParent(canvas.transform, false);
-            float xPopUpPos = Random.Range(-85.0f, 85.0f);
-            popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
-            popUpObject.GetComponent<DPSScript>().DPS(damageAmount + damageMultiplier);
-            StartCoroutine(animateDPS(popUpObject));
-        }
+        //}
+        //else
+        //{
+        //    GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
+        //    popUpObject.transform.SetParent(canvas.transform, false);
+        //    float xPopUpPos = Random.Range(-85.0f, 85.0f);
+        //    popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
+        //    popUpObject.GetComponent<DPSScript>().DPS(damageAmount + damageMultiplier);
+        //    StartCoroutine(animateDPS(popUpObject));
+        //}
     }
 
     IEnumerator animateDPS(GameObject _object)
@@ -388,11 +418,18 @@ public class PlayerScript : MonoBehaviour
         timeCharged = Mathf.Clamp(timeCharged, 1.0f, 3.0f);
         float superDamage = BossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f;
 
+        superDamage = BossScript.dealDamage(superDamage, playersLane);
 
         // deal up to 25% of the bosses maximum hp as damage depending on how long the player charged for
         //bossScript.dealDamage(bossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f);
 
-        StartCoroutine(DamageDelay(0.75f, superDamage));
+        //StartCoroutine(DamageDelay(0.75f, superDamage));
+        PopUp(superDamage);
+
+        superParticleSystem.Play();
+
+        // add to score
+        playerScore += (int)superDamage;
 
         // deplete the superMeter
         superMeter = 0;
@@ -417,9 +454,21 @@ public class PlayerScript : MonoBehaviour
 
     public void GetHit()
     {
-        // lose 10 points of mana
-        GainMeter(-10);
-        Debug.Log("got hit");
+        if (joined)
+        {
+            // lose points of mana
+            GainMeter(-50);
+            Debug.Log("got hit");
+            audioSource.PlayOneShot(audioClips[2]);
+            if (charging)
+            {
+                stunned = true;
+                canSwitchLane = false;
+                charging = false;
+                timeCharged = 0.0f;
+                animHitStun();
+            }
+        }
     }
 
     void SwitchLanes()
@@ -496,7 +545,7 @@ public class PlayerScript : MonoBehaviour
     IEnumerator DamageDelay( float _delay, float _damage)
     {
         yield return new WaitForSeconds(_delay);
-        boss.GetComponent<BossScript>().dealDamage(_damage);
+        PopUp(boss.GetComponent<BossScript>().dealDamage(_damage, playersLane));
         //StopCoroutine(DamageDelay);
     }
 }

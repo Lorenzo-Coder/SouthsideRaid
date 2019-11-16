@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d3042cd9eb04448b9165b9d2a7d687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToDamage: 3
-  blinkRate: 0.5
-  howManyBlink: 3
+  timeToDamage: 0.65
+  blinkRate: 0.3
+  howManyBlink: 1
   atkLane: 1
