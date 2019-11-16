@@ -259,13 +259,13 @@ public class PlayerScript : MonoBehaviour
 
     void attack()
     {
-        Debug.Log("player " + playersButton + " is attacking");
+        //Debug.Log("player " + playersButton + " is attacking");
         animAttack();
 
         if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
         {
             //boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
-            Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
+            //Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
 
             float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
 
@@ -399,7 +399,7 @@ public class PlayerScript : MonoBehaviour
     {
         superMeter++;
         superMeter = Mathf.Clamp(superMeter, 0, 100);
-        Debug.Log("GainMeter++ ");
+        //Debug.Log("GainMeter++ ");
         UpdateSuperMeter();
     }
 
