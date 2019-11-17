@@ -10526,7 +10526,7 @@ MonoBehaviour:
   charging: 0
   canSwitchLane: 0
   timeToBlock: 20
-  stunTime: 120
+  stunTime: 3
   iFrameLength: 0.2
   laneSwitchCooldown: 0.5
   damageMultiplierAmount: 25

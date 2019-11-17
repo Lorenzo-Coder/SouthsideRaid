@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class GruScript : BossScript
 {
@@ -26,21 +27,29 @@ public class GruScript : BossScript
     public ParticleSystem eruptAttackParticleSys;
     public ParticleSystem slamParticleSys;
 
-    public new  AudioClip[] audioClips;
+    //public new  AudioClip[] audioClips;
 
-    private new AudioSource audioSource;
+    //private new AudioSource audioSource;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
+        //base.Start();
+
+        idleTimer = idleDuration;
+        attackTimer = attackDuration;
+        downTimer = downDuration;
+        currentHealth = maxHealth;
+        audioSource = gameObject.GetComponent<AudioSource>();
+
         timesToAttack = Random.Range(1, 4);
         leftBarrierHealth = 0.01f * maxHealth;
         rightBarrierHealth = 0.01f * maxHealth;
         hpLastTick = maxHealth;
         canBeHit = false;
 
-        audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.PlayOneShot(audioClips[0]);
+        //audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -113,7 +122,7 @@ public class GruScript : BossScript
 
                     default: break;
                 }
-
+                audioSource.PlayOneShot(audioClips[8]);
                 lastLaneAttacked = attackThisLane;
                 //}
             }
@@ -127,7 +136,7 @@ public class GruScript : BossScript
         // check dmg threshold to go to exposed/down state
         if (damageAccrued >= threshold)
         {
-            audioSource.PlayOneShot(audioClips[2]);
+            audioSource.PlayOneShot(audioClips[9]);
             stance = Stances.Down;
             damageAccrued = 0.0f;
             bossAnimator.SetInteger("State", (int)AnimStates.Opening);
@@ -186,6 +195,7 @@ public class GruScript : BossScript
                     {
                         leftBarrierActive = false;
                         // TODO: AUDIOVISUAL FEEDBACK
+                        audioSource.PlayOneShot(audioClips[7]);
                         bossAnimator.Play("Left Break");
                         leftShield.SetActive(false);
                         ResetToIdle();
@@ -211,6 +221,7 @@ public class GruScript : BossScript
                     {
                         rightBarrierActive = false;
                         // TODO: AUDIOVISUAL FEEDBACK
+                        audioSource.PlayOneShot(audioClips[7]);
                         bossAnimator.Play("Right Break");
                         rightShield.SetActive(false);
                         ResetToIdle();
@@ -267,7 +278,7 @@ public class GruScript : BossScript
 
     private void Erupt()
     {
-        audioSource.PlayOneShot(audioClips[3]);
+        audioSource.PlayOneShot(audioClips[10]);
         isCritical = false;
         //ResetToIdle();
         bossAnimator.Play("Erupt", 0);
@@ -325,6 +336,27 @@ public class GruScript : BossScript
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().CameraShake();
             startingShakeHasPlayed = true;
             canBeHit = true;
+        }
+    }
+
+    protected override void Die()
+    {
+        isCritical = false;
+        //bossAnimator.SetInteger("State", (int)AnimStates.Deactivate);
+        bossAnimator.Play("Deactivate");
+
+        gameObject.transform.DOLocalMoveY(-2, 3.33f, false);
+        // Destroy self once the animation has finished playing
+        if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Deactivate") && bossAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !bossAnimator.IsInTransition(0))
+        {
+            Debug.Log("Finished animation");
+            Destroy(gameObject);
+            GameObject.FindGameObjectWithTag("Leaderboard").GetComponent<LeaderboardScript>().IncBossLevel();
+        }
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioClips[6]);
+            audioSource.PlayOneShot(audioClips[11]);
         }
     }
 }
