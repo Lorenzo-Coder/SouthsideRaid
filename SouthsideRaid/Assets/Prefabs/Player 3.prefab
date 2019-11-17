@@ -936,7 +936,7 @@ MonoBehaviour:
   charging: 0
   canSwitchLane: 0
   timeToBlock: 20
-  stunTime: 120
+  stunTime: 3
   iFrameLength: 0.2
   laneSwitchCooldown: 0.5
   damageMultiplierAmount: 25
@@ -1403,11 +1403,6 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5966135470150479021, guid: 1985e2c480a1c614985981198f291204,
-        type: 3}
-      propertyPath: m_Name
-      value: Super
-      objectReference: {fileID: 0}
     - target: {fileID: 441565923910751552, guid: 1985e2c480a1c614985981198f291204,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1462,6 +1457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5966135470150479021, guid: 1985e2c480a1c614985981198f291204,
+        type: 3}
+      propertyPath: m_Name
+      value: Super
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1985e2c480a1c614985981198f291204, type: 3}
@@ -1575,11 +1575,6 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1083516437470946060, guid: ac38d9c2d30059d40972d2ec64be1f78,
-        type: 3}
-      propertyPath: m_Name
-      value: Stunned
-      objectReference: {fileID: 0}
     - target: {fileID: 6275565265452925074, guid: ac38d9c2d30059d40972d2ec64be1f78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1644,6 +1639,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1083516437470946060, guid: ac38d9c2d30059d40972d2ec64be1f78,
+        type: 3}
+      propertyPath: m_Name
+      value: Stunned
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac38d9c2d30059d40972d2ec64be1f78, type: 3}

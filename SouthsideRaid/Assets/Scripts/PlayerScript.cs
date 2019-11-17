@@ -30,9 +30,10 @@ public class PlayerScript : MonoBehaviour
     public bool stunned;
     public bool invincible;
     public bool charging;
+    public bool chargingLastFrame;
     public bool canSwitchLane;
-    public float timeToBlock = 20.0f;
-    public float stunTime = 120.0f;
+    public float timeToBlock = 0.2f;
+    public float stunTime = 3.0f;
     public float iFrameLength = 0.2f;
     public float laneSwitchCooldown = 0.3f;
     public int damageMultiplierAmount = 25;
@@ -153,6 +154,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (stunned == false)
             {
+                //Debug.Log("Not stunned anymore");
                 stunParticleSystem.Stop();
                 if (Input.GetKeyDown(playersButton) && joined == true)
                 {
@@ -172,8 +174,14 @@ public class PlayerScript : MonoBehaviour
             {
                 //blockTimer = timeToBlock;
                 //blocking = false;
+
+                if (charging)
+                {
+                    audioSource.Stop();
+                }
                 charging = false;
                 chargingParticleSystem.Stop();
+               
                 if (timeCharged >= 1.0f)
                 {
                     SuperMove();
@@ -196,18 +204,34 @@ public class PlayerScript : MonoBehaviour
                 //    block();
                 //}
 
+                timeToBlock += Time.deltaTime;
+
+                // start charging if button held for more than x seconds
                 // start charging SuperMove
-                if (superMeter == 100)
+                if (superMeter == 100 && timeToBlock >= timeToCharge)
                 {
                     timeCharged += Time.deltaTime;
                     animCharge();
                     charging = true;
+                    // only play charging sound once
+                    if (!chargingLastFrame && charging)
+                    {
+                        audioSource.PlayOneShot(audioClips[5]);
+                    }
+
                     if (!chargingParticleSystem.isPlaying)
                     {
                         chargingParticleSystem.Play();
-                        audioSource.PlayOneShot(audioClips[5]);
+    
+                        
+
                     }
+                    
                 }
+            }
+            else
+            {
+                timeToBlock = 0.0f;
             }
 
             //if ((boss.GetComponent<BossScript>().stance == Stances.Attack) && (blocking == false) && (invincible == false))
@@ -218,7 +242,7 @@ public class PlayerScript : MonoBehaviour
 
             if (stunned == true)
             {
-                stunTimer -= 1.0f;
+                stunTimer -= Time.deltaTime;
                 if (!stunParticleSystem.isPlaying)
                 {
                     stunParticleSystem.Play();
@@ -248,6 +272,10 @@ public class PlayerScript : MonoBehaviour
             {
                 damageMultiplier = damageMultiplierAmount;
             }
+
+            chargingLastFrame = charging;
+
+          
         }
     }
 
@@ -261,13 +289,13 @@ public class PlayerScript : MonoBehaviour
 
     void attack()
     {
-        Debug.Log("player " + playersButton + " is attacking");
+        //Debug.Log("player " + playersButton + " is attacking");
         animAttack();
 
         if ((boss.GetComponent<BossScript>().stance == Stances.Down) && (boss.GetComponent<BossScript>().isCritical == true))
         {
             //boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
-            Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
+            //Debug.Log("player " + playersButton + " is attacking with " + (damageAmount + damageMultiplier));
 
             float damageDealt = boss.GetComponent<BossScript>().dealDamage(damageAmount + damageMultiplier, playersLane);
 
@@ -401,7 +429,7 @@ public class PlayerScript : MonoBehaviour
     {
         superMeter++;
         superMeter = Mathf.Clamp(superMeter, 0, 100);
-        Debug.Log("GainMeter++ ");
+        //Debug.Log("GainMeter++ ");
         UpdateSuperMeter();
     }
 
@@ -464,6 +492,7 @@ public class PlayerScript : MonoBehaviour
             audioSource.PlayOneShot(audioClips[2]);
             if (charging)
             {
+                audioSource.Stop();
                 stunned = true;
                 canSwitchLane = false;
                 charging = false;
@@ -475,9 +504,10 @@ public class PlayerScript : MonoBehaviour
 
     void SwitchLanes()
     {
-        audioSource.PlayOneShot(audioClips[4]);
+       
         if (canSwitchLane)
         {
+            audioSource.PlayOneShot(audioClips[4]);
             switch (playersLane)
             {
                 case PlayerLaneState.Left:
