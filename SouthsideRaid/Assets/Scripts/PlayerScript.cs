@@ -25,6 +25,7 @@ public enum PlayerLaneState
 public class PlayerScript : MonoBehaviour
 {
     public bool joined;
+    public float StartYLevel = -3.21f;
     public bool blocking;
     public bool stunned;
     public bool invincible;
@@ -253,7 +254,7 @@ public class PlayerScript : MonoBehaviour
     {
         modelAnimationThing.SetActive(true);
         joined = true;
-        transform.DOLocalMoveY(-3.21f, 0.2f, false);
+        transform.DOLocalMoveY(StartYLevel, 0.2f, false);
         animSwitch();
     }
 
