@@ -956,6 +956,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9bcea810dc69ea04f91220f129e613e2, type: 3}
   - {fileID: 8300000, guid: 35562ca401569a348b7030d63e099bc1, type: 3}
   - {fileID: 8300000, guid: 7e72029367242e74697a8ae5c10dad30, type: 3}
+  - {fileID: 8300000, guid: 83d2b15e19bc82041814eeb220b0086f, type: 3}
+  - {fileID: 8300000, guid: 3a676300851cdb34882d1ecb1eb762ba, type: 3}
+  - {fileID: 8300000, guid: 79cdbd6692c9589418af1efe636292ec, type: 3}
   CurrentAnimState: 0
   superMeter: 100
   timeToCharge: 0.2
