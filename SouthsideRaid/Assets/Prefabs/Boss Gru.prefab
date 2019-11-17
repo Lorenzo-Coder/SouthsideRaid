@@ -669,13 +669,11 @@ MonoBehaviour:
   minX: -1
   minY: -1
   audioClips:
-  - {fileID: 8300000, guid: 545ee1263eb28c24fbf8a5f19ffa5299, type: 3}
-  - {fileID: 8300000, guid: 973f8e1a2531e5e4b812a6c7dc445fe4, type: 3}
-  - {fileID: 8300000, guid: 8950bb3a662224c44992612aaaf47faa, type: 3}
-  - {fileID: 8300000, guid: d37a81cd7ef323c46957c5b4875e5866, type: 3}
-  - {fileID: 8300000, guid: c991e058409139e4684e9b7e5e26d390, type: 3}
-  - {fileID: 8300000, guid: 31b87806e9892254ab6bc62f0d1cba70, type: 3}
-  - {fileID: 8300000, guid: b42debddae2075e4b85334780f95bee8, type: 3}
+  - {fileID: 8300000, guid: 431333a97ceb66a4cbbb7ad443b3c8e4, type: 3}
+  - {fileID: 8300000, guid: e7c6a652028eb6848979ee76b0daceea, type: 3}
+  - {fileID: 8300000, guid: 768932e01cc5c1d42b21e60f3aafafe8, type: 3}
+  - {fileID: 8300000, guid: 872d6cb8dac7159449856ea78b9e8037, type: 3}
+  - {fileID: 8300000, guid: 8c5e20d3e3996304caa294a05f6e6d53, type: 3}
   attackLeftLane: {fileID: 6392709983377668174, guid: d350ee7422433ad419d771beff8e3b9a,
     type: 3}
   attackMidLane: {fileID: 6392709983377668174, guid: 06fff6ec88b9e1a4e90239939ce23e78,
@@ -1200,6 +1198,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slam
       objectReference: {fileID: 0}
+    - target: {fileID: 9187622866348971139, guid: dc4d07c126e390b41b89b341172fa115,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5496590541135254658, guid: dc4d07c126e390b41b89b341172fa115,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1253,11 +1256,6 @@ PrefabInstance:
     - target: {fileID: 5496590541135254658, guid: dc4d07c126e390b41b89b341172fa115,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9187622866348971139, guid: dc4d07c126e390b41b89b341172fa115,
-        type: 3}
-      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1971580249917915675, guid: dc4d07c126e390b41b89b341172fa115,

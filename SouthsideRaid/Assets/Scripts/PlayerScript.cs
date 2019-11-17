@@ -179,7 +179,7 @@ public class PlayerScript : MonoBehaviour
                     SuperMove();
                 }
                 timeCharged = 0.0f;
-               
+
                 animIdle();
             }
 
@@ -205,6 +205,7 @@ public class PlayerScript : MonoBehaviour
                     if (!chargingParticleSystem.isPlaying)
                     {
                         chargingParticleSystem.Play();
+                        audioSource.PlayOneShot(audioClips[5]);
                     }
                 }
             }
@@ -414,6 +415,7 @@ public class PlayerScript : MonoBehaviour
 
     void SuperMove()
     {
+        audioSource.PlayOneShot(audioClips[3]);
         BossScript BossScript = boss.GetComponent<BossScript>();
         timeCharged = Mathf.Clamp(timeCharged, 1.0f, 3.0f);
         float superDamage = BossScript.maxHealth * 0.25f * (timeCharged - 1.0f) / 2.0f;
@@ -473,6 +475,7 @@ public class PlayerScript : MonoBehaviour
 
     void SwitchLanes()
     {
+        audioSource.PlayOneShot(audioClips[4]);
         if (canSwitchLane)
         {
             switch (playersLane)

@@ -26,6 +26,10 @@ public class GruScript : BossScript
     public ParticleSystem eruptAttackParticleSys;
     public ParticleSystem slamParticleSys;
 
+    public new  AudioClip[] audioClips;
+
+    private new AudioSource audioSource;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -35,6 +39,8 @@ public class GruScript : BossScript
         rightBarrierHealth = 0.01f * maxHealth;
         hpLastTick = maxHealth;
         canBeHit = false;
+
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -121,6 +127,7 @@ public class GruScript : BossScript
         // check dmg threshold to go to exposed/down state
         if (damageAccrued >= threshold)
         {
+            audioSource.PlayOneShot(audioClips[2]);
             stance = Stances.Down;
             damageAccrued = 0.0f;
             bossAnimator.SetInteger("State", (int)AnimStates.Opening);
@@ -260,6 +267,7 @@ public class GruScript : BossScript
 
     private void Erupt()
     {
+        audioSource.PlayOneShot(audioClips[3]);
         isCritical = false;
         //ResetToIdle();
         bossAnimator.Play("Erupt", 0);
