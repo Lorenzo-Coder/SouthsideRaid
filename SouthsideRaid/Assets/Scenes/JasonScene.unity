@@ -2261,6 +2261,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: Leaderboard Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1430497100909125608, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430497100909125608, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_Name
+      value: ThirdSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834958540122286763, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834958540122286763, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_Name
+      value: FirstSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940072077222599985, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940072077222599985, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_Name
+      value: FourthSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 3677697873846016606, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3677697873846016606, guid: 5111917096b242949be3537fbcac27c2,
+        type: 3}
+      propertyPath: m_Name
+      value: SecondSprite
+      objectReference: {fileID: 0}
     - target: {fileID: 2224109044382524666, guid: 5111917096b242949be3537fbcac27c2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2416,40 +2456,10 @@ PrefabInstance:
       propertyPath: numbersArray.Array.data[3]
       value: 
       objectReference: {fileID: 502891069}
-    - target: {fileID: 3940072077222599985, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3940072077222599985, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_Name
-      value: FourthSprite
-      objectReference: {fileID: 0}
-    - target: {fileID: 1430497100909125608, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1430497100909125608, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_Name
-      value: ThirdSprite
-      objectReference: {fileID: 0}
     - target: {fileID: 9105263030187894331, guid: 5111917096b242949be3537fbcac27c2,
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6834958540122286763, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6834958540122286763, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_Name
-      value: FirstSprite
       objectReference: {fileID: 0}
     - target: {fileID: 7101846612522836369, guid: 5111917096b242949be3537fbcac27c2,
         type: 3}
@@ -2465,16 +2475,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3677697873846016606, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3677697873846016606, guid: 5111917096b242949be3537fbcac27c2,
-        type: 3}
-      propertyPath: m_Name
-      value: SecondSprite
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5111917096b242949be3537fbcac27c2, type: 3}
@@ -2937,6 +2937,16 @@ PrefabInstance:
       propertyPath: VFX
       value: 
       objectReference: {fileID: 809554494}
+    - target: {fileID: 7391248614985720896, guid: 98db6102226d64046ab97a0e6aadd9e0,
+        type: 3}
+      propertyPath: superMeter
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391248614985720896, guid: 98db6102226d64046ab97a0e6aadd9e0,
+        type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 1249192810}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98db6102226d64046ab97a0e6aadd9e0, type: 3}
 --- !u!1001 &8766399392820407644

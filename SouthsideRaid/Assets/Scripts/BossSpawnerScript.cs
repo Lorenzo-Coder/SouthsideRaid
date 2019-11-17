@@ -21,22 +21,22 @@ public class BossSpawnerScript : MonoBehaviour
         // If there is no boss spawn a new one with more hp.
         if (GameObject.FindGameObjectWithTag("Boss") == null)
         {
-            GameObject newBoss = longArmPrefab;
+            GameObject newBoss = apePrefab;
 
             //alternate between the two boss types
-            switch (previousBossType)
-            {
-                case BossType.Ape:
-                    newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
-                    previousBossType = BossType.LongArm;
-                    break;
-                case BossType.LongArm:
+            //switch (previousBossType)
+            //{
+            //    case BossType.Ape:
                     newBoss = Instantiate(apePrefab, Vector3.zero, Quaternion.identity);
-                    previousBossType = BossType.Ape;
+            //        previousBossType = BossType.LongArm;
+            //        break;
+            //    case BossType.LongArm:
+            //        newBoss = Instantiate(apePrefab, Vector3.zero, Quaternion.identity);
+            //        previousBossType = BossType.Ape;
 
-                    break;
-                default: break;
-            }
+            //        break;
+            //    default: break;
+            //}
             //newBoss = Instantiate(longArmPrefab, Vector3.zero, Quaternion.identity);
             newBoss.GetComponent<BossScript>().maxHealth = (currentBossMaxHealth * hpMultiplier);
             currentBossMaxHealth = newBoss.GetComponent<BossScript>().maxHealth;
