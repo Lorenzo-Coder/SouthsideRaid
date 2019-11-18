@@ -61,7 +61,7 @@ public class PlayerScript : MonoBehaviour
     private int timesAttacked = 0;
     private bool foundBoss;
     [SerializeField] private PlayerAnimState CurrentAnimState;
-    private bool finishedSpawning = true;
+    private bool finishedSpawning = false;
     private AudioSource audioSource;
     private bool laneDirection = true; //true is left, false is right
 
@@ -97,7 +97,7 @@ public class PlayerScript : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         initialPosition = gameObject.transform.position;
 
-        
+
 
         //set starting position
         //gameObject.transform.position = new Vector3(LaneNodes[1].gameObject.transform.position.x, LaneNodes[1].gameObject.transform.position.y, gameObject.transform.position.y);
@@ -181,7 +181,7 @@ public class PlayerScript : MonoBehaviour
                 }
                 charging = false;
                 chargingParticleSystem.Stop();
-               
+
                 if (timeCharged >= 1.0f)
                 {
                     SuperMove();
@@ -222,11 +222,11 @@ public class PlayerScript : MonoBehaviour
                     if (!chargingParticleSystem.isPlaying)
                     {
                         chargingParticleSystem.Play();
-    
-                        
+
+
 
                     }
-                    
+
                 }
             }
             else
@@ -275,7 +275,7 @@ public class PlayerScript : MonoBehaviour
 
             chargingLastFrame = charging;
 
-          
+
         }
     }
 
@@ -285,6 +285,7 @@ public class PlayerScript : MonoBehaviour
         joined = true;
         transform.DOLocalMoveY(StartYLevel, 0.2f, false);
         animSwitch();
+        StartCoroutine("FinishSpawningCheck");
     }
 
     void attack()
@@ -348,12 +349,12 @@ public class PlayerScript : MonoBehaviour
     {
         //if (withM == false)
         //{
-            GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
-            popUpObject.transform.SetParent(canvas.transform, false);
-            float xPopUpPos = Random.Range(-85.0f, 85.0f);
-            popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
-            popUpObject.GetComponent<DPSScript>().DPS((int)_damage);
-            StartCoroutine(animateDPS(popUpObject));
+        GameObject popUpObject = Instantiate(DPSPopup, Vector3.zero, Quaternion.identity);
+        popUpObject.transform.SetParent(canvas.transform, false);
+        float xPopUpPos = Random.Range(-85.0f, 85.0f);
+        popUpObject.transform.position = new Vector3(canvas.transform.position.x + xPopUpPos, canvas.transform.position.y + 100, canvas.transform.position.z);
+        popUpObject.GetComponent<DPSScript>().DPS((int)_damage);
+        StartCoroutine(animateDPS(popUpObject));
         //}
         //else
         //{
@@ -504,7 +505,7 @@ public class PlayerScript : MonoBehaviour
 
     void SwitchLanes()
     {
-       
+
         if (canSwitchLane)
         {
             audioSource.PlayOneShot(audioClips[4]);
@@ -557,7 +558,7 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator movePlayerLeft()
     {
-        gameObject.transform.DOLocalJump(new Vector3(gameObject.transform.position.x - 5.0f, gameObject.transform.position.y, 
+        gameObject.transform.DOLocalJump(new Vector3(gameObject.transform.position.x - 5.0f, gameObject.transform.position.y,
             gameObject.transform.position.z), 1.0f, 1, 0.3f, false);
         yield return null;
     }
@@ -575,10 +576,16 @@ public class PlayerScript : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator DamageDelay( float _delay, float _damage)
+    IEnumerator DamageDelay(float _delay, float _damage)
     {
         yield return new WaitForSeconds(_delay);
         PopUp(boss.GetComponent<BossScript>().dealDamage(_damage, playersLane));
         //StopCoroutine(DamageDelay);
+    }
+
+    IEnumerator FinishSpawningCheck()
+    {
+        yield return new WaitForSeconds(0.2f);
+        finishedSpawning = true;
     }
 }
